@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ders Çalışma Takip Uygulaması</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        
+        header {
+            background: #4e54c8;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+        
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+        
+        .date-display {
+            font-size: 1.1rem;
+            margin: 10px 0;
+            font-weight: 500;
+        }
+        
+        .auth-container {
+            padding: 15px;
+            background: #f8f9fa;
+            text-align: center;
+        }
+        
+        .auth-btn {
+            padding: 12px 20px;
+            border-radius: 50px;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            background: #4e54c8;
+            color: white;
+            margin: 5px;
+        }
+        
+        .auth-btn:hover {
+            background: #3f44a7;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            background: #f8f9fa;
+        }
+        
+        .user-email {
+            margin-right: 10px;
+            font-weight: 500;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            padding: 15px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .stat-box {
+            text-align: center;
+            padding: 10px;
+        }
+        
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #4e54c8;
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+        
+        .subject-list {
+            padding: 20px;
+        }
+        
+        .subject-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .subject-name {
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+        }
+        
+        .subject-name i {
+            margin-right: 10px;
+            color: #4e54c8;
+        }
+        
+        .subject-input {
+            width: 80px;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        .subject-input:focus {
+            border-color: #4e54c8;
+            outline: none;
+        }
+        
+        .reading-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 0 20px 20px;
+        }
+        
+        .reading-title {
+            font-weight: 500;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .reading-title i {
+            margin-right: 10px;
+            color: #4e54c8;
+        }
+        
+        .reading-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 15px;
+            text-align: center;
+            font-size: 1.2rem;
+            transition: border-color 0.3s;
+        }
+        
+        .reading-input:focus {
+            border-color: #4e54c8;
+            outline: none;
+        }
+        
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px 20px;
+        }
+        
+        .btn {
+            padding: 15px 25px;
+            border-radius: 15px;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: #4e54c8;
+            color: white;
+            flex: 1;
+            margin-right: 10px;
+        }
+        
+        .btn-primary:hover {
+            background: #3f44a7;
+        }
+        
+        .btn-secondary {
+            background: #f0f2f5;
+            color: #333;
+            width: 55px;
+        }
+        
+        .btn-secondary:hover {
+            background: #e0e3e9;
+        }
+        
+        .history-container {
+            padding: 20px;
+        }
+        
+        .history-title {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #4e54c8;
+            display: flex;
+            align-items: center;
+        }
+        
+        .history-title i {
+            margin-right: 10px;
+        }
+        
+        .history-item {
+            padding: 15px;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .history-date {
+            font-weight: 500;
+        }
+        
+        .history-stats {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        
+        .motivation {
+            text-align: center;
+            color: white;
+            margin-top: 20px;
+            font-size: 1rem;
+            max-width: 500px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            padding: 0 10px;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 30px;
+            color: #6c757d;
+        }
+        
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: #ced4da;
+        }
+        
+        .tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: #6c757d;
+        }
+        
+        .tab.active {
+            color: #4e54c8;
+            border-bottom: 3px solid #4e54c8;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #6c757d;
+        }
+        
+        .loading i {
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+        }
+        
+        .modal-input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 15px;
+        }
+        
+        .modal-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        
+        .modal-btn-primary {
+            background-color: #4e54c8;
+            color: white;
+        }
+        
+        .modal-btn-secondary {
+            background-color: #f0f2f5;
+            color: #333;
+        }
+        
+        @media (max-width: 500px) {
+            .subject-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .subject-input {
+                width: 100%;
+                margin-top: 10px;
+            }
+            
+            .buttons {
+                flex-direction: column;
+            }
+            
+            .btn-primary {
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+    
+    <!-- Firebase App ve Authentication SDK'ları -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Ders Çalışma Takip Uygulaması</h1>
+            <div class="date-display" id="current-date">28 Ağustos 2023 Pazartesi</div>
+            <p>8. Sınıf Sınav Hazırlığı</p>
+        </header>
+        
+        <div id="auth-container" class="auth-container">
+            <p>Verilerinizi kaydetmek için giriş yapın</p>
+            <button class="auth-btn" onclick="showLoginModal()">
+                <i class="fas fa-sign-in-alt"></i> Giriş Yap
+            </button>
+            <button class="auth-btn" onclick="showSignupModal()">
+                <i class="fas fa-user-plus"></i> Kayıt Ol
+            </button>
+        </div>
+        
+        <div id="user-container" class="user-info" style="display: none;">
+            <span class="user-email" id="user-email">kullanici@example.com</span>
+            <button class="auth-btn" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Çıkış
+            </button>
+        </div>
+        
+        <div class="tabs">
+            <div class="tab active" onclick="showTab('today')">Bugün</div>
+            <div class="tab" onclick="showTab('history')">Geçmiş</div>
+        </div>
+        
+        <div class="tab-content active" id="today-tab">
+            <div class="stats">
+                <div class="stat-box">
+                    <div class="stat-value" id="total-questions">0</div>
+                    <div class="stat-label">Çözülen Soru</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="total-pages">0</div>
+                    <div class="stat-label">Okunan Sayfa</div>
+                </div>
+            </div>
+            
+            <div class="subject-list">
+                <div class="subject-item">
+                    <div class="subject-name"><i class="fas fa-language"></i> Türkçe</div>
+                    <input type="number" min="0" class="subject-input" placeholder="0" id="turkce">
+                </div>
+                <div class="subject-item">
+                    <div class="subject-name"><i class="fas fa-calculator"></i> Matematik</div>
+                    <input type="number" min="0" class="subject-input" placeholder="0" id="matematik">
+                </div>
+                <div class="subject-item">
+                    <div class="subject-name"><i class="fas fa-flask"></i> Fen Bilimleri</div>
+                    <input type="number" min="0" class="subject-input" placeholder="0" id="fen">
+                </div>
+                <div class="subject-item">
+                    <div class="subject-name"><i class="fas fa-landmark"></i> T.C. İnkılap Tarihi</div>
+                    <input type="number" min="0" class="subject-input" placeholder="0" id="inkilap">
+                </div>
+                <div class="subject-item">
+                    <div class="subject-name"><i class="fas fa-pray"></i> Din Kültürü</div>
+                    <input type="number" min="0" class="subject-input" placeholder="0" id="din">
+                </div>
+                <div class="subject-item">
+                    <div class="subject-name"><i class="fas fa-globe"></i> İngilizce</div>
+                    <input type="number" min="0" class="subject-input" placeholder="0" id="ingilizce">
+                </div>
+            </div>
+            
+            <div class="reading-section">
+                <div class="reading-title">
+                    <i class="fas fa-book-open"></i> Okunan Sayfa Sayısı
+                </div>
+                <input type="number" min="0" class="reading-input" placeholder="0" id="sayfa">
+            </div>
+            
+            <div class="buttons">
+                <button class="btn btn-primary" id="save-btn" onclick="saveDailyData()">
+                    <i class="fas fa-save"></i> Günü Kaydet
+                </button>
+                <button class="btn btn-secondary" onclick="printData()">
+                    <i class="fas fa-print"></i>
+                </button>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="history-tab">
+            <div class="history-container">
+                <div class="history-title">
+                    <i class="fas fa-history"></i> Geçmiş Kayıtlar
+                </div>
+                <div id="history-list">
+                    <div class="loading">
+                        <i class="fas fa-spinner"></i> Yükleniyor...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Giriş Modal -->
+    <div id="login-modal" class="modal">
+        <div class="modal-content">
+            <h2>Giriş Yap</h2>
+            <input type="email" id="login-email" class="modal-input" placeholder="E-posta">
+            <input type="password" id="login-password" class="modal-input" placeholder="Şifre">
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-secondary" onclick="hideModal('login-modal')">İptal</button>
+                <button class="modal-btn modal-btn-primary" onclick="login()">Giriş Yap</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Kayıt Modal -->
+    <div id="signup-modal" class="modal">
+        <div class="modal-content">
+            <h2>Kayıt Ol</h2>
+            <input type="email" id="signup-email" class="modal-input" placeholder="E-posta">
+            <input type="password" id="signup-password" class="modal-input" placeholder="Şifre (en az 6 karakter)">
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-secondary" onclick="hideModal('signup-modal')">İptal</button>
+                <button class="modal-btn modal-btn-primary" onclick="signup()">Kayıt Ol</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="motivation">
+        <p>"Başarı, küçük çabaların sürekliliğinden doğar." - Robert Collier</p>
+    </div>
+
+    <script>
+        // Firebase yapılandırması - KENDİ PROJE AYARLARINIZI BURAYA EKLEYİN
+        const firebaseConfig = {
+            apiKey: "AIzaSyDPwQwozGYycrr7tuDqzkUM3a_sqm8Xwr0",
+            authDomain: "ders-programim-2d68e.firebaseapp.com",
+            projectId: "ders-programim-2d68e",
+            storageBucket: "ders-programim-2d68e.firebasestorage.app",
+            messagingSenderId: "658998929408",
+            appId: "1:658998929408:web:92d5a6fffd728ba6f410e5",
+            measurementId: "G-13JJ56NNMZ"
+        };
+        
+        // Firebase'i başlat
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        
+        // Kullanıcı durumunu izle
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                // Kullanıcı giriş yapmış
+                document.getElementById('auth-container').style.display = 'none';
+                document.getElementById('user-container').style.display = 'flex';
+                document.getElementById('user-email').textContent = user.email;
+                
+                // Bugünün verilerini yükle
+                loadTodaysData();
+                
+                // Geçmiş sekmesi aktifse geçmiş verileri yükle
+                if (document.getElementById('history-tab').classList.contains('active')) {
+                    loadHistory();
+                }
+            } else {
+                // Kullanıcı giriş yapmamış
+                document.getElementById('auth-container').style.display = 'block';
+                document.getElementById('user-container').style.display = 'none';
+            }
+        });
+        
+        // Sayfa yüklendiğinde
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tarihi güncelle
+            updateDate();
+            
+            // Input değişikliklerini dinle ve istatistikleri güncelle
+            const inputs = document.querySelectorAll('input');
+            inputs.forEach(input => {
+                input.addEventListener('input', updateStats);
+            });
+            
+            // İlk yüklemede istatistikleri güncelle
+            updateStats();
+        });
+        
+        // Tarihi güncelleme fonksiyonu
+        function updateDate() {
+            const now = new Date();
+            const options = { day: 'numeric', month: 'long', year: 'numeric', weekday: 'long' };
+            const dateString = now.toLocaleDateString('tr-TR', options);
+            document.getElementById('current-date').textContent = dateString;
+        }
+        
+        // İstatistikleri güncelleme fonksiyonu
+        function updateStats() {
+            let totalQuestions = 0;
+            
+            // Ders inputlarını al
+            const turkce = parseInt(document.getElementById('turkce').value) || 0;
+            const matematik = parseInt(document.getElementById('matematik').value) || 0;
+            const fen = parseInt(document.getElementById('fen').value) || 0;
+            const inkilap = parseInt(document.getElementById('inkilap').value) || 0;
+            const din = parseInt(document.getElementById('din').value) || 0;
+            const ingilizce = parseInt(document.getElementById('ingilizce').value) || 0;
+            
+            // Toplam soru sayısını hesapla
+            totalQuestions = turkce + matematik + fen + inkilap + din + ingilizce;
+            
+            // Sayfa sayısını al
+            const totalPages = parseInt(document.getElementById('sayfa').value) || 0;
+            
+            // İstatistikleri güncelle
+            document.getElementById('total-questions').textContent = totalQuestions;
+            document.getElementById('total-pages').textContent = totalPages;
+        }
+        
+        // Modal gösterimi
+        function showModal(modalId) {
+            document.getElementById(modalId).style.display = 'flex';
+        }
+        
+        // Modal gizleme
+        function hideModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+        
+        // Giriş modalını göster
+        function showLoginModal() {
+            document.getElementById('login-email').value = '';
+            document.getElementById('login-password').value = '';
+            showModal('login-modal');
+        }
+        
+        // Kayıt modalını göster
+        function showSignupModal() {
+            document.getElementById('signup-email').value = '';
+            document.getElementById('signup-password').value = '';
+            showModal('signup-modal');
+        }
+        
+        // Giriş yapma fonksiyonu
+        function login() {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            
+            if (!email || !password) {
+                alert("Lütfen e-posta ve şifre girin.");
+                return;
+            }
+            
+            auth.signInWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    hideModal('login-modal');
+                    alert("Başarıyla giriş yapıldı!");
+                })
+                .catch((error) => {
+                    alert("Giriş hatası: " + error.message);
+                });
+        }
+        
+        // Kayıt olma fonksiyonu
+        function signup() {
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+            
+            if (!email || !password) {
+                alert("Lütfen e-posta ve şifre girin.");
+                return;
+            }
+            
+            if (password.length < 6) {
+                alert("Şifre en az 6 karakter olmalıdır.");
+                return;
+            }
+            
+            auth.createUserWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    hideModal('signup-modal');
+                    alert("Hesabınız başarıyla oluşturuldu! Giriş yapıldı.");
+                })
+                .catch((error) => {
+                    alert("Kayıt hatası: " + error.message);
+                });
+        }
+        
+        // Çıkış yapma fonksiyonu
+        function logout() {
+            auth.signOut().then(() => {
+                alert("Çıkış yapıldı.");
+            }).catch((error) => {
+                alert("Çıkış hatası: " + error.message);
+            });
+        }
+        
+        // Bugünün verilerini yükleme fonksiyonu
+        function loadTodaysData() {
+            const user = auth.currentUser;
+            if (!user) return;
+            
+            const now = new Date();
+            const dateKey = now.toISOString().split('T')[0]; // YYYY-MM-DD formatında tarih
+            
+            db.collection("users").doc(user.uid).collection("days").doc(dateKey)
+                .get()
+                .then((doc) => {
+                    if (doc.exists) {
+                        // Bugünün verileri zaten kaydedilmiş, inputları doldur
+                        const data = doc.data();
+                        document.getElementById('turkce').value = data.turkce || 0;
+                        document.getElementById('matematik').value = data.matematik || 0;
+                        document.getElementById('fen').value = data.fen || 0;
+                        document.getElementById('inkilap').value = data.inkilap || 0;
+                        document.getElementById('din').value = data.din || 0;
+                        document.getElementById('ingilizce').value = data.ingilizce || 0;
+                        document.getElementById('sayfa').value = data.sayfa || 0;
+                        
+                        // Inputları disable yap
+                        const inputs = document.querySelectorAll('input');
+                        inputs.forEach(input => {
+                            input.disabled = true;
+                        });
+                        
+                        document.getElementById('save-btn').disabled = true;
+                        document.getElementById('save-btn').innerHTML = '<i class="fas fa-check"></i> Bugün Kaydedildi';
+                        
+                        // İstatistikleri güncelle
+                        updateStats();
+                    }
+                })
+                .catch((error) => {
+                    console.log("Veri yükleme hatası:", error);
+                });
+        }
+        
+        // Günlük verileri kaydetme fonksiyonu
+        function saveDailyData() {
+            const user = auth.currentUser;
+            if (!user) {
+                alert("Lütfen önce giriş yapın!");
+                return;
+            }
+            
+            const now = new Date();
+            const dateKey = now.toISOString().split('T')[0]; // YYYY-MM-DD formatında tarih
+            
+            // Bugünün verilerini al
+            const dailyData = {
+                date: now.toLocaleDateString('tr-TR'),
+                turkce: parseInt(document.getElementById('turkce').value) || 0,
+                matematik: parseInt(document.getElementById('matematik').value) || 0,
+                fen: parseInt(document.getElementById('fen').value) || 0,
+                inkilap: parseInt(document.getElementById('inkilap').value) || 0,
+                din: parseInt(document.getElementById('din').value) || 0,
+                ingilizce: parseInt(document.getElementById('ingilizce').value) || 0,
+                sayfa: parseInt(document.getElementById('sayfa').value) || 0,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            };
+            
+            // Toplam soru sayısını hesapla
+            dailyData.total = dailyData.turkce + dailyData.matematik + dailyData.fen + 
+                             dailyData.inkilap + dailyData.din + dailyData.ingilizce;
+            
+            // Firestore'a kaydet
+            db.collection("users").doc(user.uid).collection("days").doc(dateKey)
+                .set(dailyData)
+                .then(() => {
+                    alert('Bugünkü verileriniz kaydedildi! Yarın yeni bir gün için hazır olacak.');
+                    
+                    // Inputları disable yap
+                    const inputs = document.querySelectorAll('input');
+                    inputs.forEach(input => {
+                        input.disabled = true;
+                    });
+                    
+                    document.getElementById('save-btn').disabled = true;
+                    document.getElementById('save-btn').innerHTML = '<i class="fas fa-check"></i> Bugün Kaydedildi';
+                })
+                .catch((error) => {
+                    alert("Kayıt hatası: " + error.message);
+                });
+        }
+        
+        // Geçmiş kayıtları yükleme fonksiyonu
+        function loadHistory() {
+            const user = auth.currentUser;
+            if (!user) {
+                document.getElementById('history-list').innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <p>Geçmiş verileri görüntülemek için giriş yapmalısınız</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            document.getElementById('history-list').innerHTML = `
+                <div class="loading">
+                    <i class="fas fa-spinner"></i> Yükleniyor...
+                </div>
+            `;
+            
+            db.collection("users").doc(user.uid).collection("days")
+                .orderBy("timestamp", "desc")
+                .limit(10)
+                .get()
+                .then((querySnapshot) => {
+                    if (querySnapshot.empty) {
+                        document.getElementById('history-list').innerHTML = `
+                            <div class="empty-state">
+                                <i class="fas fa-clipboard-list"></i>
+                                <p>Henüz kayıtlı veri bulunmamaktadır</p>
+                            </div>
+                        `;
+                        return;
+                    }
+                    
+                    let historyHTML = '';
+                    querySnapshot.forEach((doc) => {
+                        const data = doc.data();
+                        historyHTML += `
+                            <div class="history-item">
+                                <div class="history-date">${data.date}</div>
+                                <div class="history-stats">${data.total} soru, ${data.sayfa} sayfa</div>
+                            </div>
+                        `;
+                    });
+                    
+                    document.getElementById('history-list').innerHTML = historyHTML;
+                })
+                .catch((error) => {
+                    document.getElementById('history-list').innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <p>Veriler yüklenirken hata oluştu</p>
+                        </div>
+                    `;
+                    console.log("Geçmiş yükleme hatası:", error);
+                });
+        }
+        
+        // Yazdırma fonksiyonu
+        function printData() {
+            window.print();
+        }
+        
+        // Tab gösterimini değiştirme
+        function showTab(tabName) {
+            // Tüm tab içeriklerini gizle
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Tüm tab başlıklarını pasif yap
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // İlgili tab içeriğini göster
+            document.getElementById(tabName + '-tab').classList.add('active');
+            
+            // İlgili tab başlığını aktif yap
+            document.querySelectorAll('.tab').forEach(tab => {
+                if (tab.textContent === (tabName === 'today' ? 'Bugün' : 'Geçmiş')) {
+                    tab.classList.add('active');
+                }
+            });
+            
+            // Geçmiş sekmesi seçilirse geçmişi güncelle
+            if (tabName === 'history') {
+                loadHistory();
+            }
+        }
+    </script>
+</body>
+</html>
