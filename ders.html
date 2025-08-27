@@ -378,6 +378,17 @@
             color: #333;
         }
         
+        .form-error {
+            display: none;
+            margin-top: 8px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            background-color: #fde8e8;
+            color: #b71c1c;
+            border: 1px solid #f5c2c7;
+            font-size: 0.95rem;
+        }
+        
         @media (max-width: 500px) {
             .subject-item {
                 flex-direction: column;
@@ -398,6 +409,47 @@
                 margin-bottom: 10px;
             }
         }
+        
+        /* Toast bildirimleri */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .toast {
+            min-width: 260px;
+            max-width: 360px;
+            padding: 12px 14px;
+            border-radius: 10px;
+            color: #1f2937;
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transform: translateY(-10px);
+            opacity: 0;
+            transition: all 0.25s ease-in-out;
+        }
+        
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .toast-success { border-left: 5px solid #16a34a; }
+        .toast-error   { border-left: 5px solid #dc2626; }
+        .toast-warning { border-left: 5px solid #f59e0b; }
+        .toast-info    { border-left: 5px solid #3b82f6; }
+        
+        .toast-icon { font-size: 1.1rem; }
+        .toast-text { font-weight: 500; }
     </style>
     
     <!-- Firebase App ve Authentication SDK'ları -->
@@ -505,12 +557,16 @@
         </div>
     </div>
     
+    <!-- Toast Container -->
+    <div id="toast-container" class="toast-container"></div>
+
     <!-- Giriş Modal -->
     <div id="login-modal" class="modal">
         <div class="modal-content">
             <h2>Giriş Yap</h2>
             <input type="email" id="login-email" class="modal-input" placeholder="E-posta">
             <input type="password" id="login-password" class="modal-input" placeholder="Şifre">
+            <div id="login-error" class="form-error"></div>
             <div class="modal-buttons">
                 <button class="modal-btn modal-btn-secondary" onclick="hideModal('login-modal')">İptal</button>
                 <button class="modal-btn modal-btn-primary" onclick="login()">Giriş Yap</button>
@@ -524,6 +580,7 @@
             <h2>Kayıt Ol</h2>
             <input type="email" id="signup-email" class="modal-input" placeholder="E-posta">
             <input type="password" id="signup-password" class="modal-input" placeholder="Şifre (en az 6 karakter)">
+            <div id="signup-error" class="form-error"></div>
             <div class="modal-buttons">
                 <button class="modal-btn modal-btn-secondary" onclick="hideModal('signup-modal')">İptal</button>
                 <button class="modal-btn modal-btn-primary" onclick="signup()">Kayıt Ol</button>
@@ -634,6 +691,7 @@
         function showLoginModal() {
             document.getElementById('login-email').value = '';
             document.getElementById('login-password').value = '';
+            clearError('login-error');
             showModal('login-modal');
         }
         
@@ -641,7 +699,58 @@
         function showSignupModal() {
             document.getElementById('signup-email').value = '';
             document.getElementById('signup-password').value = '';
+            clearError('signup-error');
             showModal('signup-modal');
+        }
+        
+        function showError(id, message) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.textContent = message;
+            el.style.display = 'block';
+        }
+        
+        function clearError(id) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.textContent = '';
+            el.style.display = 'none';
+        }
+        
+        function showToast(message, type = 'info', duration = 3000) {
+            const container = document.getElementById('toast-container');
+            if (!container) return;
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            const iconClass = {
+                success: 'fa-check-circle',
+                error: 'fa-circle-exclamation',
+                warning: 'fa-triangle-exclamation',
+                info: 'fa-circle-info'
+            }[type] || 'fa-circle-info';
+            toast.innerHTML = `<i class="fa-solid ${iconClass} toast-icon"></i><span class="toast-text">${message}</span>`;
+            container.appendChild(toast);
+            // trigger animation
+            requestAnimationFrame(() => toast.classList.add('show'));
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 250);
+            }, duration);
+        }
+        
+        function getAuthErrorMessage(code, context) {
+            const isLogin = context === 'login';
+            const map = {
+                'auth/invalid-email': 'Geçersiz e-posta adresi.',
+                'auth/user-disabled': 'Bu hesap devre dışı bırakılmış.',
+                'auth/user-not-found': isLogin ? 'Bu e-posta ile kayıtlı kullanıcı bulunamadı.' : 'Kullanıcı bulunamadı.',
+                'auth/wrong-password': 'Şifre hatalı.',
+                'auth/too-many-requests': 'Çok fazla deneme yapıldı. Lütfen daha sonra tekrar deneyin.',
+                'auth/network-request-failed': 'Ağ hatası. İnternet bağlantınızı kontrol edin.',
+                'auth/email-already-in-use': 'Bu e-posta zaten kullanımda.',
+                'auth/weak-password': 'Şifre çok zayıf. En az 6 karakter olmalıdır.'
+            };
+            return map[code] || 'Bir hata oluştu. Lütfen tekrar deneyin.';
         }
         
         // Giriş yapma fonksiyonu
@@ -650,17 +759,26 @@
             const password = document.getElementById('login-password').value;
             
             if (!email || !password) {
-                alert("Lütfen e-posta ve şifre girin.");
+                showError('login-error', 'Lütfen e-posta ve şifre girin.');
                 return;
             }
             
             auth.signInWithEmailAndPassword(email, password)
                 .then((userCredential) => {
                     hideModal('login-modal');
-                    alert("Başarıyla giriş yapıldı!");
+                    clearError('login-error');
+                    showToast('Başarıyla giriş yapıldı.', 'success');
                 })
                 .catch((error) => {
-                    alert("Giriş hatası: " + error.message);
+                    const message = getAuthErrorMessage(error.code, 'login');
+                    showError('login-error', message);
+                    if (error.code === 'auth/wrong-password') {
+                        document.getElementById('login-password').focus();
+                        showToast('Şifre hatalı.', 'error');
+                    } else if (error.code === 'auth/user-not-found') {
+                        document.getElementById('login-email').focus();
+                        showToast('Hesap bulunamadı. E-postayı kontrol edin.', 'warning');
+                    }
                 });
         }
         
@@ -670,31 +788,32 @@
             const password = document.getElementById('signup-password').value;
             
             if (!email || !password) {
-                alert("Lütfen e-posta ve şifre girin.");
+                showError('signup-error', 'Lütfen e-posta ve şifre girin.');
                 return;
             }
             
             if (password.length < 6) {
-                alert("Şifre en az 6 karakter olmalıdır.");
+                showError('signup-error', 'Şifre en az 6 karakter olmalıdır.');
                 return;
             }
             
             auth.createUserWithEmailAndPassword(email, password)
                 .then((userCredential) => {
                     hideModal('signup-modal');
-                    alert("Hesabınız başarıyla oluşturuldu! Giriş yapıldı.");
+                    clearError('signup-error');
+                    showToast('Hesabınız oluşturuldu. Giriş yapıldı.', 'success');
                 })
                 .catch((error) => {
-                    alert("Kayıt hatası: " + error.message);
+                    showError('signup-error', getAuthErrorMessage(error.code, 'signup'));
                 });
         }
         
         // Çıkış yapma fonksiyonu
         function logout() {
             auth.signOut().then(() => {
-                alert("Çıkış yapıldı.");
+                showToast('Çıkış yapıldı.', 'info');
             }).catch((error) => {
-                alert("Çıkış hatası: " + error.message);
+                showToast('Çıkış hatası: ' + (error?.message || ''), 'error');
             });
         }
         
