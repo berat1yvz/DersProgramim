@@ -660,20 +660,26 @@
         <div id="role-selection" class="role-selection">
             <div class="role-title">Hesap Türünü Seçin</div>
             <div class="role-options">
-                <div class="role-option" onclick="selectRole('student')">
+                <div class="role-option" onclick="selectRole('student', this)">
                     <i class="fas fa-user-graduate role-icon"></i>
                     <div class="role-name">Öğrenci</div>
                     <div class="role-desc">Ders çalışma verilerinizi takip edin</div>
                 </div>
-                <div class="role-option" onclick="selectRole('teacher')">
+                <div class="role-option" onclick="selectRole('teacher', this)">
                     <i class="fas fa-chalkboard-teacher role-icon"></i>
                     <div class="role-name">Öğretmen</div>
                     <div class="role-desc">Öğrenci verilerini görüntüleyin</div>
                 </div>
             </div>
-            <button class="role-continue" id="continue-btn" onclick="continueToApp()" disabled>
-                Devam Et
-            </button>
+            <div class="auth-buttons" id="auth-buttons" style="display: none;">
+                <p style="margin-bottom: 15px; color: #6c757d;">Verilerinizi kaydetmek için giriş yapın</p>
+                <button class="auth-btn" onclick="showLoginModal()">
+                    <i class="fas fa-sign-in-alt"></i> Giriş Yap
+                </button>
+                <button class="auth-btn" onclick="showSignupModal()">
+                    <i class="fas fa-user-plus"></i> Kayıt Ol
+                </button>
+            </div>
         </div>
 
         <!-- Öğrenci Paneli -->
@@ -947,9 +953,13 @@
                     if (document.getElementById('history-tab').classList.contains('active')) {
                         loadHistory();
                     }
+                    // Öğrenci paneline yönlendir
+                    continueToApp();
                 } else if (selectedRole === 'teacher') {
                     // Öğretmen paneline öğrenci listesini yükle
                     loadStudentsList();
+                    // Öğretmen paneline yönlendir
+                    continueToApp();
                 }
             } else {
                 // Kullanıcı giriş yapmamış
@@ -1015,11 +1025,11 @@
         
         let selectedRole = null;
         
-        function selectRole(role) {
+        function selectRole(role, el) {
             selectedRole = role;
             document.querySelectorAll('.role-option').forEach(opt => opt.classList.remove('selected'));
-            event.currentTarget.classList.add('selected');
-            document.getElementById('continue-btn').disabled = false;
+            if (el) { el.classList.add('selected'); }
+            document.getElementById('auth-buttons').style.display = 'block';
         }
         
         function continueToApp() {
@@ -1049,7 +1059,7 @@
             document.getElementById('teacher-panel').style.display = 'none';
             document.getElementById('role-switch').style.display = 'none';
             selectedRole = null;
-            document.getElementById('continue-btn').disabled = true;
+            document.getElementById('auth-buttons').style.display = 'none';
             document.querySelectorAll('.role-option').forEach(opt => opt.classList.remove('selected'));
         }
         
@@ -1136,12 +1146,18 @@
                 showError('login-error', 'Lütfen e-posta ve şifre girin.');
                 return;
             }
+            if (!selectedRole) {
+                showError('login-error', 'Lütfen önce Öğrenci veya Öğretmen seçin.');
+                return;
+            }
             
             auth.signInWithEmailAndPassword(email, password)
                 .then((userCredential) => {
                     hideModal('login-modal');
                     clearError('login-error');
                     showToast('Başarıyla giriş yapıldı.', 'success');
+                    // Giriş sonrası role göre yönlendir
+                    continueToApp();
                 })
                 .catch((error) => {
                     const message = getAuthErrorMessage(error.code, 'login');
@@ -1194,6 +1210,12 @@
                     hideModal('signup-modal');
                     clearError('signup-error');
                     showToast('Hesabınız oluşturuldu. Giriş yapıldı.', 'success');
+                    // Kayıt sonrası role göre yönlendir
+                    if (!selectedRole) {
+                        showRoleSelection();
+                    } else {
+                        continueToApp();
+                    }
                 })
                 .catch((error) => {
                     showError('signup-error', getAuthErrorMessage(error.code, 'signup'));
