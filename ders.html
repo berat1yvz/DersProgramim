@@ -497,6 +497,87 @@
             border-color: #4e54c8;
         }
         
+        /* Öğretmen paneli stilleri */
+        .teacher-dashboard {
+            padding: 20px;
+        }
+        
+        .student-list {
+            margin-top: 20px;
+        }
+        
+        .student-item {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .student-item:hover {
+            background: #e9ecef;
+            transform: translateY(-2px);
+        }
+        
+        .student-name {
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+        
+        .student-stats {
+            display: flex;
+            justify-content: space-between;
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        
+        .student-detail {
+            margin-top: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .stat-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .date-filter {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .filter-input {
+            padding: 8px 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+        
         @media (max-width: 500px) {
             .subject-item {
                 flex-direction: column;
@@ -515,6 +596,15 @@
             .btn-primary {
                 margin-right: 0;
                 margin-bottom: 10px;
+            }
+            
+            .role-options {
+                flex-direction: column;
+            }
+            
+            .date-filter {
+                flex-direction: column;
+                align-items: flex-start;
             }
         }
         
@@ -586,101 +676,200 @@
             </button>
         </div>
 
-        <header>
-            <h1>DERS TAKİP UYGULAMASI</h1>
-            <div class="date-display" id="current-date">28 Ağustos 2023 Pazartesi</div>
-        </header>
-        
-        <div class="role-switch" id="role-switch" onclick="showRoleSelection()" style="display: none;">
-            <i class="fas fa-exchange-alt"></i> Hesap Değiştir
+        <!-- Öğrenci Paneli -->
+        <div id="student-panel">
+            <header>
+                <h1>DERS TAKİP UYGULAMASI</h1>
+                <div class="date-display" id="current-date">28 Ağustos 2023 Pazartesi</div>
+            </header>
+            
+            <div class="role-switch" id="role-switch" onclick="showRoleSelection()" style="display: none;">
+                <i class="fas fa-exchange-alt"></i> Hesap Değiştir
+            </div>
+            
+            <div id="auth-container" class="auth-container">
+                <p>Verilerinizi kaydetmek için giriş yapın</p>
+                <button class="auth-btn" onclick="showLoginModal()">
+                    <i class="fas fa-sign-in-alt"></i> Giriş Yap
+                </button>
+                <button class="auth-btn" onclick="showSignupModal()">
+                    <i class="fas fa-user-plus"></i> Kayıt Ol
+                </button>
+            </div>
+            
+            <div id="user-container" class="user-info" style="display: none;">
+                <span class="user-email" id="user-email">kullanici@example.com</span>
+                <button class="auth-btn" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Çıkış
+                </button>
+            </div>
+            
+            <div class="tabs">
+                <div class="tab active" onclick="showTab('today')">Bugün</div>
+                <div class="tab" onclick="showTab('history')">Geçmiş</div>
+            </div>
+            
+            <div class="tab-content active" id="today-tab">
+                <div class="stats">
+                    <div class="stat-box">
+                        <div class="stat-value" id="total-questions">0</div>
+                        <div class="stat-label">Çözülen Soru</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value" id="total-pages">0</div>
+                        <div class="stat-label">Okunan Sayfa</div>
+                    </div>
+                </div>
+                
+                <div class="subject-list">
+                    <div class="subject-item">
+                        <div class="subject-name"><i class="fas fa-language"></i> Türkçe</div>
+                        <input type="number" min="0" class="subject-input" placeholder="0" id="turkce">
+                    </div>
+                    <div class="subject-item">
+                        <div class="subject-name"><i class="fas fa-calculator"></i> Matematik</div>
+                        <input type="number" min="0" class="subject-input" placeholder="0" id="matematik">
+                    </div>
+                    <div class="subject-item">
+                        <div class="subject-name"><i class="fas fa-flask"></i> Fen Bilimleri</div>
+                        <input type="number" min="0" class="subject-input" placeholder="0" id="fen">
+                    </div>
+                    <div class="subject-item">
+                        <div class="subject-name"><i class="fas fa-landmark"></i> T.C. İnkılap Tarihi</div>
+                        <input type="number" min="0" class="subject-input" placeholder="0" id="inkilap">
+                    </div>
+                    <div class="subject-item">
+                        <div class="subject-name"><i class="fas fa-pray"></i> Din Kültürü</div>
+                        <input type="number" min="0" class="subject-input" placeholder="0" id="din">
+                    </div>
+                    <div class="subject-item">
+                        <div class="subject-name"><i class="fas fa-globe"></i> İngilizce</div>
+                        <input type="number" min="0" class="subject-input" placeholder="0" id="ingilizce">
+                    </div>
+                </div>
+                
+                <div class="reading-section">
+                    <div class="reading-title">
+                        <i class="fas fa-book-open"></i> Okunan Sayfa Sayısı
+                    </div>
+                    <input type="number" min="0" class="reading-input" placeholder="0" id="sayfa">
+                </div>
+                
+                <div class="buttons">
+                    <button class="btn btn-primary" id="save-btn" onclick="saveDailyData()">
+                        <i class="fas fa-save"></i> Günü Kaydet
+                    </button>
+                    <button class="btn btn-secondary" onclick="printData()">
+                        <i class="fas fa-print"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="tab-content" id="history-tab">
+                <div class="history-container">
+                    <div class="history-title">
+                        <i class="fas fa-history"></i> Geçmiş Kayıtlar
+                    </div>
+                    <div id="history-list">
+                        <div class="loading">
+                            <i class="fas fa-spinner"></i> Yükleniyor...
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         
-        <div id="auth-container" class="auth-container">
-            <p>Verilerinizi kaydetmek için giriş yapın</p>
-            <button class="auth-btn" onclick="showLoginModal()">
-                <i class="fas fa-sign-in-alt"></i> Giriş Yap
-            </button>
-            <button class="auth-btn" onclick="showSignupModal()">
-                <i class="fas fa-user-plus"></i> Kayıt Ol
-            </button>
-        </div>
-        
-        <div id="user-container" class="user-info" style="display: none;">
-            <span class="user-email" id="user-email">kullanici@example.com</span>
-            <button class="auth-btn" onclick="logout()">
-                <i class="fas fa-sign-out-alt"></i> Çıkış
-            </button>
-        </div>
-        
-        <div class="tabs">
-            <div class="tab active" onclick="showTab('today')">Bugün</div>
-            <div class="tab" onclick="showTab('history')">Geçmiş</div>
-        </div>
-        
-        <div class="tab-content active" id="today-tab">
+        <!-- Öğretmen Paneli -->
+        <div id="teacher-panel" class="teacher-dashboard" style="display: none;">
+            <header>
+                <h1>ÖĞRETMEN PANELİ</h1>
+                <div class="date-display" id="teacher-date">28 Ağustos 2023 Pazartesi</div>
+            </header>
+            
+            <div class="role-switch" onclick="showRoleSelection()">
+                <i class="fas fa-chalkboard-teacher"></i> Öğretmen
+            </div>
+            
+            <div class="user-info">
+                <span class="user-email" id="teacher-email">ogretmen@example.com</span>
+                <button class="auth-btn" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Çıkış
+                </button>
+            </div>
+            
+            <div class="date-filter">
+                <span>Tarih Aralığı:</span>
+                <input type="date" id="start-date" class="filter-input">
+                <span>-</span>
+                <input type="date" id="end-date" class="filter-input">
+                <button class="auth-btn" onclick="loadStudentsData()">
+                    <i class="fas fa-filter"></i> Filtrele
+                </button>
+            </div>
+            
             <div class="stats">
                 <div class="stat-box">
-                    <div class="stat-value" id="total-questions">0</div>
-                    <div class="stat-label">Çözülen Soru</div>
+                    <div class="stat-value" id="total-students">0</div>
+                    <div class="stat-label">Toplam Öğrenci</div>
                 </div>
                 <div class="stat-box">
-                    <div class="stat-value" id="total-pages">0</div>
-                    <div class="stat-label">Okunan Sayfa</div>
+                    <div class="stat-value" id="avg-questions">0</div>
+                    <div class="stat-label">Ort. Soru Sayısı</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="avg-pages">0</div>
+                    <div class="stat-label">Ort. Sayfa Sayısı</div>
                 </div>
             </div>
             
-            <div class="subject-list">
-                <div class="subject-item">
-                    <div class="subject-name"><i class="fas fa-language"></i> Türkçe</div>
-                    <input type="number" min="0" class="subject-input" placeholder="0" id="turkce">
-                </div>
-                <div class="subject-item">
-                    <div class="subject-name"><i class="fas fa-calculator"></i> Matematik</div>
-                    <input type="number" min="0" class="subject-input" placeholder="0" id="matematik">
-                </div>
-                <div class="subject-item">
-                    <div class="subject-name"><i class="fas fa-flask"></i> Fen Bilimleri</div>
-                    <input type="number" min="0" class="subject-input" placeholder="0" id="fen">
-                </div>
-                <div class="subject-item">
-                    <div class="subject-name"><i class="fas fa-landmark"></i> T.C. İnkılap Tarihi</div>
-                    <input type="number" min="0" class="subject-input" placeholder="0" id="inkilap">
-                </div>
-                <div class="subject-item">
-                    <div class="subject-name"><i class="fas fa-pray"></i> Din Kültürü</div>
-                    <input type="number" min="0" class="subject-input" placeholder="0" id="din">
-                </div>
-                <div class="subject-item">
-                    <div class="subject-name"><i class="fas fa-globe"></i> İngilizce</div>
-                    <input type="number" min="0" class="subject-input" placeholder="0" id="ingilizce">
-                </div>
-            </div>
-            
-            <div class="reading-section">
-                <div class="reading-title">
-                    <i class="fas fa-book-open"></i> Okunan Sayfa Sayısı
-                </div>
-                <input type="number" min="0" class="reading-input" placeholder="0" id="sayfa">
-            </div>
-            
-            <div class="buttons">
-                <button class="btn btn-primary" id="save-btn" onclick="saveDailyData()">
-                    <i class="fas fa-save"></i> Günü Kaydet
-                </button>
-                <button class="btn btn-secondary" onclick="printData()">
-                    <i class="fas fa-print"></i>
-                </button>
-            </div>
-        </div>
-        
-        <div class="tab-content" id="history-tab">
-            <div class="history-container">
-                <div class="history-title">
-                    <i class="fas fa-history"></i> Geçmiş Kayıtlar
-                </div>
-                <div id="history-list">
+            <div class="student-list">
+                <h2><i class="fas fa-users"></i> Öğrenci Listesi</h2>
+                <div id="students-container">
                     <div class="loading">
-                        <i class="fas fa-spinner"></i> Yükleniyor...
+                        <i class="fas fa-spinner"></i> Öğrenci listesi yükleniyor...
+                    </div>
+                </div>
+            </div>
+            
+            <div id="student-detail" class="student-detail" style="display: none;">
+                <div class="detail-header">
+                    <h3 id="detail-student-name">Öğrenci Detayları</h3>
+                    <button class="auth-btn" onclick="hideStudentDetail()">
+                        <i class="fas fa-times"></i> Kapat
+                    </button>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">Türkçe</div>
+                        <div class="stat-value" id="det-turkce">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Matematik</div>
+                        <div class="stat-value" id="det-matematik">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Fen Bilimleri</div>
+                        <div class="stat-value" id="det-fen">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">İnkılap Tarihi</div>
+                        <div class="stat-value" id="det-inkilap">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Din Kültürü</div>
+                        <div class="stat-value" id="det-din">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">İngilizce</div>
+                        <div class="stat-value" id="det-ingilizce">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Toplam Soru</div>
+                        <div class="stat-value" id="det-total">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Okunan Sayfa</div>
+                        <div class="stat-value" id="det-sayfa">0</div>
                     </div>
                 </div>
             </div>
@@ -724,7 +913,7 @@
     </div>
 
     <script>
-        // Firebase yapılandırması - KENDİ PROJE AYARLARINIZI BURAYA EKLEYİN
+        // Firebase yapılandırması
         const firebaseConfig = {
             apiKey: "AIzaSyDPw0wozG7ycrr7tuDqzKUM3a_sqm8Xwr0",
             authDomain: "ders-programim-2d68e.firebaseapp.com",
@@ -747,13 +936,20 @@
                 document.getElementById('auth-container').style.display = 'none';
                 document.getElementById('user-container').style.display = 'flex';
                 document.getElementById('user-email').textContent = user.email;
+                document.getElementById('teacher-email').textContent = user.email;
                 
-                // Bugünün verilerini yükle
-                loadTodaysData();
-                
-                // Geçmiş sekmesi aktifse geçmiş verileri yükle
-                if (document.getElementById('history-tab').classList.contains('active')) {
-                    loadHistory();
+                // Rol kontrolü
+                if (selectedRole === 'student') {
+                    // Bugünün verilerini yükle
+                    loadTodaysData();
+                    
+                    // Geçmiş sekmesi aktifse geçmiş verileri yükle
+                    if (document.getElementById('history-tab').classList.contains('active')) {
+                        loadHistory();
+                    }
+                } else if (selectedRole === 'teacher') {
+                    // Öğretmen paneline öğrenci listesini yükle
+                    loadStudentsList();
                 }
             } else {
                 // Kullanıcı giriş yapmamış
@@ -786,6 +982,7 @@
             const options = { day: 'numeric', month: 'long', year: 'numeric', weekday: 'long' };
             const dateString = now.toLocaleDateString('tr-TR', options);
             document.getElementById('current-date').textContent = dateString;
+            document.getElementById('teacher-date').textContent = dateString;
         }
         
         // İstatistikleri güncelleme fonksiyonu
@@ -827,13 +1024,29 @@
         
         function continueToApp() {
             if (!selectedRole) return;
-            document.getElementById('role-selection').style.display = 'none';
-            document.getElementById('role-switch').style.display = 'block';
-            document.getElementById('role-switch').innerHTML = `<i class="fas fa-${selectedRole === 'student' ? 'user-graduate' : 'chalkboard-teacher'}"></i> ${selectedRole === 'student' ? 'Öğrenci' : 'Öğretmen'}`;
+            
+            if (selectedRole === 'student') {
+                document.getElementById('role-selection').style.display = 'none';
+                document.getElementById('student-panel').style.display = 'block';
+                document.getElementById('teacher-panel').style.display = 'none';
+                document.getElementById('role-switch').style.display = 'block';
+                document.getElementById('role-switch').innerHTML = `<i class="fas fa-user-graduate"></i> Öğrenci`;
+            } else if (selectedRole === 'teacher') {
+                document.getElementById('role-selection').style.display = 'none';
+                document.getElementById('student-panel').style.display = 'none';
+                document.getElementById('teacher-panel').style.display = 'block';
+                document.getElementById('role-switch').style.display = 'block';
+                document.getElementById('role-switch').innerHTML = `<i class="fas fa-chalkboard-teacher"></i> Öğretmen`;
+                
+                // Öğretmen paneline öğrenci listesini yükle
+                loadStudentsList();
+            }
         }
         
         function showRoleSelection() {
             document.getElementById('role-selection').style.display = 'flex';
+            document.getElementById('student-panel').style.display = 'none';
+            document.getElementById('teacher-panel').style.display = 'none';
             document.getElementById('role-switch').style.display = 'none';
             selectedRole = null;
             document.getElementById('continue-btn').disabled = true;
@@ -1140,6 +1353,88 @@
                     `;
                     console.log("Geçmiş yükleme hatası:", error);
                 });
+        }
+        
+        // Öğretmen paneli işlevleri
+        function loadStudentsList() {
+            // Öğrenci listesini yükle
+            const user = auth.currentUser;
+            if (!user) return;
+            
+            // Demo öğrenci listesi (gerçek uygulamada Firestore'dan çekilecek)
+            const demoStudents = [
+                { id: '1', name: 'Ahmet Yılmaz', email: 'ahmet@example.com', totalQuestions: 125, totalPages: 45 },
+                { id: '2', name: 'Ayşe Kaya', email: 'ayse@example.com', totalQuestions: 98, totalPages: 32 },
+                { id: '3', name: 'Mehmet Demir', email: 'mehmet@example.com', totalQuestions: 156, totalPages: 56 },
+                { id: '4', name: 'Zeynep Çelik', email: 'zeynep@example.com', totalQuestions: 87, totalPages: 28 }
+            ];
+            
+            let studentsHTML = '';
+            demoStudents.forEach(student => {
+                studentsHTML += `
+                    <div class="student-item" onclick="showStudentDetail('${student.id}')">
+                        <div class="student-name">${student.name}</div>
+                        <div class="student-stats">
+                            <span>${student.totalQuestions} soru</span>
+                            <span>${student.totalPages} sayfa</span>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            document.getElementById('students-container').innerHTML = studentsHTML;
+            document.getElementById('total-students').textContent = demoStudents.length;
+            
+            // Ortalama hesaplamaları
+            const avgQuestions = Math.round(demoStudents.reduce((sum, student) => sum + student.totalQuestions, 0) / demoStudents.length);
+            const avgPages = Math.round(demoStudents.reduce((sum, student) => sum + student.totalPages, 0) / demoStudents.length);
+            
+            document.getElementById('avg-questions').textContent = avgQuestions;
+            document.getElementById('avg-pages').textContent = avgPages;
+        }
+        
+        function showStudentDetail(studentId) {
+            // Öğrenci detaylarını göster
+            document.getElementById('student-detail').style.display = 'block';
+            
+            // Demo öğrenci verileri (gerçek uygulamada Firestore'dan çekilecek)
+            const demoStudentData = {
+                name: 'Ahmet Yılmaz',
+                turkce: 25,
+                matematik: 35,
+                fen: 30,
+                inkilap: 15,
+                din: 10,
+                ingilizce: 10,
+                total: 125,
+                sayfa: 45
+            };
+            
+            document.getElementById('detail-student-name').textContent = demoStudentData.name + ' - Detaylı İstatistikler';
+            document.getElementById('det-turkce').textContent = demoStudentData.turkce;
+            document.getElementById('det-matematik').textContent = demoStudentData.matematik;
+            document.getElementById('det-fen').textContent = demoStudentData.fen;
+            document.getElementById('det-inkilap').textContent = demoStudentData.inkilap;
+            document.getElementById('det-din').textContent = demoStudentData.din;
+            document.getElementById('det-ingilizce').textContent = demoStudentData.ingilizce;
+            document.getElementById('det-total').textContent = demoStudentData.total;
+            document.getElementById('det-sayfa').textContent = demoStudentData.sayfa;
+        }
+        
+        function hideStudentDetail() {
+            document.getElementById('student-detail').style.display = 'none';
+        }
+        
+        function loadStudentsData() {
+            // Filtreleme yapılmış öğrenci verilerini yükle
+            const startDate = document.getElementById('start-date').value;
+            const endDate = document.getElementById('end-date').value;
+            
+            if (startDate && endDate) {
+                showToast(`${startDate} - ${endDate} tarih aralığı için filtreleme yapıldı`, 'info');
+            } else {
+                showToast('Tüm öğrenci verileri yüklendi', 'info');
+            }
         }
         
         // Yazdırma fonksiyonu
