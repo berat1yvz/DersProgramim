@@ -239,6 +239,18 @@
         .btn-secondary:hover {
             background: #e0e3e9;
         }
+
+        /* Öğrenci: Sınıfa Katıl butonu */
+        .btn-join {
+            background: #ffffff;
+            color: #4e54c8;
+            border: 2px solid #4e54c8;
+            flex: 1;
+        }
+        .btn-join:hover {
+            background: #4e54c8;
+            color: #ffffff;
+        }
         
         .history-container {
             padding: 20px;
@@ -536,6 +548,57 @@
             background: #e9ecef;
             transform: translateY(-2px);
         }
+
+        /* Sınıf kartları */
+        .classes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 12px;
+            margin-top: 12px;
+        }
+        .class-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+        }
+        .class-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        .class-name {
+            font-weight: 600;
+        }
+        .class-count-badge {
+            background: #4e54c8;
+            color: #fff;
+            padding: 2px 8px;
+            border-radius: 999px;
+            font-size: 0.8rem;
+        }
+        .class-card-actions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .class-card-actions .small-btn {
+            padding: 8px 10px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            background: #4e54c8;
+            color: #fff;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            justify-content: center;
+        }
+        .class-card-actions .small-btn.secondary { background: #6b7280; }
+        .class-card-actions .small-btn.danger { background: #dc2626; }
         
         .student-name {
             font-weight: 500;
@@ -932,8 +995,8 @@
                     <button class="btn btn-primary" id="save-btn" onclick="saveDailyData()">
                         <i class="fas fa-save"></i> Günü Kaydet
                     </button>
-                    <button class="btn btn-secondary" onclick="printData()">
-                        <i class="fas fa-print"></i>
+                    <button class="btn btn-join" onclick="openJoinClassModal()" title="Sınıf ID ile katıl">
+                        <i class="fas fa-door-open"></i> Sınıfa Gir
                     </button>
                 </div>
             </div>
@@ -969,20 +1032,9 @@
             
             
             
-            <div class="date-filter">
-                <span>Tarih Aralığı:</span>
-                <input type="date" id="start-date" class="filter-input">
-                <span>-</span>
-                <input type="date" id="end-date" class="filter-input">
-                <button class="auth-btn" onclick="loadStudentsData()">
-                    <i class="fas fa-filter"></i> Filtrele
-                </button>
-            </div>
+            
             
             <div class="teacher-actions">
-                <button class="teacher-action-btn" onclick="exportData()">
-                    <i class="fas fa-download"></i> Verileri İndir
-                </button>
                 <button class="teacher-action-btn" onclick="sendReminders()">
                     <i class="fas fa-bell"></i> Hatırlatma Gönder
                 </button>
@@ -1009,24 +1061,12 @@
                 </div>
             </div>
             
-            <div class="student-list">
-                <h2><i class="fas fa-users"></i> Öğrenci Listesi</h2>
-                <div id="students-container">
-                    <div class="loading">
-                        <i class="fas fa-spinner"></i> Öğrenci listesi yükleniyor...
-                    </div>
-                </div>
-            </div>
+            
 
             <!-- Sınıflar Bölümü -->
             <div class="student-list" style="margin-top: 25px;">
                 <h2><i class="fas fa-school"></i> Sınıflarım</h2>
-                <div id="classes-container">
-                    <div class="empty-state">
-                        <i class="fas fa-school"></i>
-                        <p>Henüz sınıf oluşturmadınız</p>
-                    </div>
-                </div>
+                <div id="classes-container"></div>
             </div>
             
             <div id="student-detail" class="student-detail" style="display: none;">
@@ -1129,6 +1169,32 @@
             <div class="modal-buttons">
                 <button class="modal-btn modal-btn-secondary" onclick="closeAddStudentModal()">İptal</button>
                 <button class="modal-btn modal-btn-primary" onclick="confirmAddStudentToClass()">Ekle</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Üyeler Modalı -->
+    <div id="members-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h3>Sınıf Üyeleri</h3>
+            <div id="members-list" style="max-height: 260px; overflow: auto; margin-top: 10px;"></div>
+            <div id="members-error" class="form-error"></div>
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-secondary" onclick="closeMembersModal()">Kapat</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sınıfa Katıl Modalı (Öğrenci) -->
+    <div id="join-class-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h3>Sınıfa Gir</h3>
+            <p>Öğretmeninizden aldığınız Sınıf ID’sini girin.</p>
+            <input type="text" id="join-class-id" class="modal-input" placeholder="Sınıf ID">
+            <div id="join-class-error" class="form-error"></div>
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-secondary" onclick="closeJoinClassModal()">İptal</button>
+                <button class="modal-btn modal-btn-primary" onclick="joinClassById()">Katıl</button>
             </div>
         </div>
     </div>
@@ -1435,8 +1501,6 @@
             document.getElementById('role-switch').style.display = 'block';
             document.getElementById('role-switch').innerHTML = `<i class="fas fa-chalkboard-teacher"></i> Öğretmen`;
             
-            // Öğretmen paneline öğrenci listesini yükle
-            loadStudentsList();
             // Sınıfları yükle
             loadTeacherClasses();
         }
@@ -2016,26 +2080,7 @@
             return fullName;
         }
         
-        function loadStudentsData() {
-            // Filtreleme yapılmış öğrenci verilerini yükle
-            const startDate = document.getElementById('start-date').value;
-            const endDate = document.getElementById('end-date').value;
-            
-            if (startDate && endDate) {
-                showToast(`${startDate} - ${endDate} tarih aralığı için filtreleme yapıldı`, 'info');
-                // Burada filtreleme işlemleri yapılacak
-                // Şimdilik tüm listeyi yeniden yüklüyoruz
-                loadStudentsList();
-            } else {
-                showToast('Tüm öğrenci verileri yüklendi', 'info');
-                loadStudentsList();
-            }
-        }
         
-        function exportData() {
-            showToast('Veri indirme işlemi başlatıldı', 'info');
-            // Burada veri indirme işlemleri yapılacak
-        }
         
         function sendReminders() {
             showToast('Hatırlatma mesajları gönderildi', 'success');
@@ -2082,6 +2127,7 @@
 
         // Sınıf yönetimi: UI aksiyonları
         let currentSelectedClassId = null;
+        let currentMembersClassId = null;
         function openCreateClassModal() {
             clearError('create-class-error');
             document.getElementById('class-name-input').value = '';
@@ -2098,6 +2144,25 @@
         }
         function closeAddStudentModal() {
             document.getElementById('add-student-modal').style.display = 'none';
+        }
+        // Öğrenci: sınıfa katıl modal
+        function openJoinClassModal() {
+            clearError('join-class-error');
+            document.getElementById('join-class-id').value = '';
+            document.getElementById('join-class-modal').style.display = 'flex';
+        }
+        function closeJoinClassModal() {
+            document.getElementById('join-class-modal').style.display = 'none';
+        }
+        function openMembersModal(classId) {
+            currentMembersClassId = classId;
+            clearError('members-error');
+            document.getElementById('members-list').innerHTML = '<div class="loading"><i class="fas fa-spinner"></i> Yükleniyor...</div>';
+            document.getElementById('members-modal').style.display = 'flex';
+            loadMembersList(classId);
+        }
+        function closeMembersModal() {
+            document.getElementById('members-modal').style.display = 'none';
         }
 
         // Sınıf oluşturma
@@ -2158,21 +2223,36 @@
                     const tb = (b.createdAt && b.createdAt.toMillis) ? b.createdAt.toMillis() : 0;
                     return tb - ta;
                 });
-                let html = '';
-                docs.forEach(c => {
-                    const id = c.id;
-                    const count = (c.memberIds && c.memberIds.length) || 0;
-                    html += `
-                        <div class="student-item">
-                            <div class="student-name">${c.name}</div>
-                            <div class="student-stats">
-                                <span>${count} öğrenci</span>
-                                <button class="teacher-action-btn" onclick="openAddStudentModal('${id}')"><i class='fas fa-user-plus'></i> Ekle</button>
-                            </div>
+                if (!docs.length) {
+                    document.getElementById('classes-container').innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-school"></i>
+                            <p>Henüz sınıf oluşturmadınız</p>
                         </div>
                     `;
-                });
-                document.getElementById('classes-container').innerHTML = html;
+                } else {
+                    let html = '<div class="classes-grid">';
+                    docs.forEach(c => {
+                        const id = c.id;
+                        const count = (c.memberIds && c.memberIds.length) || 0;
+                        html += `
+                            <div class="class-card">
+                                <div class="class-card-header">
+                                    <div class="class-name">${c.name}</div>
+                                    <div class="class-count-badge">${count}</div>
+                                </div>
+                                <div class="class-card-actions">
+                                    <button class="small-btn" onclick="openAddStudentModal('${id}')"><i class='fas fa-user-plus'></i> Öğrenci</button>
+                                    <button class="small-btn secondary" onclick="copyClassId('${id}')"><i class='fas fa-copy'></i> Kopyala</button>
+                                    <button class="small-btn secondary" onclick="openMembersModal('${id}')"><i class='fas fa-users'></i> Üyeler</button>
+                                    <button class="small-btn danger" onclick="deleteClass('${id}')"><i class='fas fa-trash'></i> Sil</button>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    html += '</div>';
+                    document.getElementById('classes-container').innerHTML = html;
+                }
             } catch (e) {
                 console.error('loadTeacherClasses error', e);
                 document.getElementById('classes-container').innerHTML = `
@@ -2209,22 +2289,185 @@
                     return;
                 }
                 // Kullanıcıyı email ile bul (users koleksiyonunda email alanına göre)
-                const qs = await db.collection('users').where('email', '==', email).where('role', '==', 'student').limit(1).get();
-                if (qs.empty) {
-                    showError('add-student-error', 'Bu e-posta ile kayıtlı öğrenci bulunamadı.');
+                let studentId = null;
+                try {
+                    const qs = await db.collection('users').where('email', '==', email).where('role', '==', 'student').limit(1).get();
+                    if (qs.empty) {
+                        showError('add-student-error', 'Bu e-posta ile kayıtlı öğrenci bulunamadı.');
+                        return;
+                    }
+                    studentId = qs.docs[0].id;
+                } catch (findErr) {
+                    // Yetki yoksa kullanıcıya kurallar hakkında bilgi ver
+                    if (findErr && (findErr.code === 'permission-denied' || (findErr.message||'').includes('Missing or insufficient permissions'))) {
+                        showError('add-student-error', 'İzin yok: Öğrencileri e-posta ile aramak için öğretmenlere users koleksiyonunda read izni tanımlayın.');
+                        return;
+                    }
+                    throw findErr;
+                }
+                const classRef = db.collection('classes').doc(currentSelectedClassId);
+                // Zaten üyeyse tekrar ekleme
+                const cur = clsDoc.data();
+                const members = Array.isArray(cur.memberIds) ? cur.memberIds : [];
+                if (members.includes(studentId)) {
+                    showError('add-student-error', 'Öğrenci zaten bu sınıfta.');
                     return;
                 }
-                const studentId = qs.docs[0].id;
-                const classRef = db.collection('classes').doc(currentSelectedClassId);
-                await classRef.update({
-                    memberIds: firebase.firestore.FieldValue.arrayUnion(studentId)
-                });
+                await classRef.update({ memberIds: firebase.firestore.FieldValue.arrayUnion(studentId) });
                 closeAddStudentModal();
                 showToast('Öğrenci sınıfa eklendi.', 'success');
                 await loadTeacherClasses();
             } catch (e) {
                 console.error('confirmAddStudentToClass error', e);
-                showError('add-student-error', 'Öğrenci eklenirken hata oluştu.');
+                const msg = (e && e.message) ? e.message : '';
+                if (msg.includes('Missing or insufficient permissions') || (e && e.code === 'permission-denied')) {
+                    showError('add-student-error', 'Yetki hatası: Firestore kurallarını öğretmenlerin sınıflarını güncellemesine ve users okumasına izin verecek şekilde güncelleyin.');
+                } else {
+                    showError('add-student-error', 'Öğrenci eklenirken hata oluştu: ' + msg);
+                }
+            }
+        }
+
+        // Öğrenci: Sınıfa katıl (Class ID ile)
+        async function joinClassById() {
+            const user = auth.currentUser;
+            if (!user) {
+                showError('join-class-error', 'Önce giriş yapın.');
+                return;
+            }
+            const classId = (document.getElementById('join-class-id').value || '').trim();
+            if (!classId) {
+                showError('join-class-error', 'Lütfen Sınıf ID girin.');
+                return;
+            }
+            try {
+                const clsRef = db.collection('classes').doc(classId);
+                const clsDoc = await clsRef.get();
+                if (!clsDoc.exists) {
+                    showError('join-class-error', 'Sınıf bulunamadı.');
+                    return;
+                }
+                const data = clsDoc.data();
+                const members = Array.isArray(data.memberIds) ? data.memberIds : [];
+                if (members.includes(user.uid)) {
+                    showError('join-class-error', 'Zaten bu sınıftasınız.');
+                    return;
+                }
+                await clsRef.update({ memberIds: firebase.firestore.FieldValue.arrayUnion(user.uid) });
+                closeJoinClassModal();
+                showToast('Sınıfa katıldınız.', 'success');
+            } catch (e) {
+                console.error('joinClassById error', e);
+                const msg = (e && e.message) ? e.message : '';
+                if (msg.includes('Missing or insufficient permissions') || (e && e.code === 'permission-denied')) {
+                    showError('join-class-error', 'Yetki hatası: Sınıflara öğrencilerin katılmasına izin verecek şekilde kuralları güncelleyin.');
+                } else {
+                    showError('join-class-error', 'Sınıfa katılırken hata oluştu: ' + msg);
+                }
+            }
+        }
+
+        // Üyeleri yükle
+        async function loadMembersList(classId) {
+            try {
+                const clsDoc = await db.collection('classes').doc(classId).get();
+                if (!clsDoc.exists) {
+                    document.getElementById('members-list').innerHTML = '<p>Sınıf bulunamadı.</p>';
+                    return;
+                }
+                const members = Array.isArray(clsDoc.data().memberIds) ? clsDoc.data().memberIds : [];
+                if (!members.length) {
+                    document.getElementById('members-list').innerHTML = '<p>Bu sınıfta henüz öğrenci yok.</p>';
+                    return;
+                }
+                // Üye bilgilerini getir (öncelik: students koleksiyonu -> fullName/first+last; alternatif: users.email)
+                const chunks = [];
+                for (const memberId of members) {
+                    try {
+                        let displayName = '';
+                        // Öncelik: students/{uid}
+                        try {
+                            const sDoc = await db.collection('students').doc(memberId).get();
+                            if (sDoc.exists) {
+                                const sd = sDoc.data();
+                                if (sd) {
+                                    displayName = sd.fullName || ((sd.firstName && sd.lastName) ? `${sd.firstName} ${sd.lastName}` : '');
+                                }
+                            }
+                        } catch {}
+                        // Alternatif: users/{uid}.email
+                        if (!displayName) {
+                            const uDoc = await db.collection('users').doc(memberId).get();
+                            displayName = uDoc.exists ? (uDoc.data().email || memberId) : memberId;
+                        }
+                        chunks.push(`
+                            <div class="student-item" style="cursor: default;">
+                                <div class="student-name">${displayName}</div>
+                                <div class="student-stats">
+                                    <button class="teacher-action-btn" onclick="removeStudentFromClass('${classId}','${memberId}')"><i class='fas fa-user-minus'></i> Çıkar</button>
+                                </div>
+                            </div>
+                        `);
+                    } catch {}
+                }
+                document.getElementById('members-list').innerHTML = chunks.join('');
+            } catch (e) {
+                console.error('loadMembersList error', e);
+                showError('members-error', 'Üyeler yüklenirken hata oluştu.');
+            }
+        }
+
+        // Üyeyi sınıftan çıkar
+        async function removeStudentFromClass(classId, studentId) {
+            const user = auth.currentUser;
+            if (!user) return;
+            try {
+                const clsDoc = await db.collection('classes').doc(classId).get();
+                if (!clsDoc.exists) return;
+                if (clsDoc.data().ownerId !== user.uid) {
+                    showError('members-error', 'Bu sınıf üzerinde değişiklik yetkiniz yok.');
+                    return;
+                }
+                await db.collection('classes').doc(classId).update({
+                    memberIds: firebase.firestore.FieldValue.arrayRemove(studentId)
+                });
+                showToast('Öğrenci sınıftan çıkarıldı.', 'success');
+                loadMembersList(classId);
+                loadTeacherClasses();
+            } catch (e) {
+                console.error('removeStudentFromClass error', e);
+                showError('members-error', 'Öğrenciyi çıkarırken hata oluştu.');
+            }
+        }
+
+        // Sınıf sil
+        async function deleteClass(classId) {
+            const user = auth.currentUser;
+            if (!user) return;
+            if (!confirm('Sınıfı silmek istediğinize emin misiniz?')) return;
+            try {
+                const clsDoc = await db.collection('classes').doc(classId).get();
+                if (!clsDoc.exists) return;
+                if (clsDoc.data().ownerId !== user.uid) {
+                    showToast('Bu sınıfı silme yetkiniz yok.', 'error');
+                    return;
+                }
+                await db.collection('classes').doc(classId).delete();
+                showToast('Sınıf silindi.', 'success');
+                loadTeacherClasses();
+            } catch (e) {
+                console.error('deleteClass error', e);
+                showToast('Sınıf silinirken hata oluştu.', 'error');
+            }
+        }
+
+        // Sınıf ID kopyala
+        async function copyClassId(classId) {
+            try {
+                await navigator.clipboard.writeText(classId);
+                showToast('Sınıf ID kopyalandı.', 'success');
+            } catch {
+                showToast('Kopyalama başarısız.', 'error');
             }
         }
 
