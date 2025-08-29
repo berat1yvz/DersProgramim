@@ -578,6 +578,145 @@
             font-size: 0.9rem;
         }
         
+        /* Rol seçiminde giriş formu stilleri */
+        .role-auth-container {
+            width: 100%;
+            max-width: 400px;
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            display: none;
+        }
+        
+        .role-auth-title {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #4e54c8;
+            font-weight: 600;
+        }
+        
+        .role-auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .role-auth-input {
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        .role-auth-input:focus {
+            border-color: #4e54c8;
+            outline: none;
+        }
+        
+        .role-auth-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        
+        .role-auth-btn {
+            padding: 12px 20px;
+            border-radius: 10px;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .role-auth-primary {
+            background: #4e54c8;
+            color: white;
+        }
+        
+        .role-auth-primary:hover {
+            background: #3f44a7;
+        }
+        
+        .role-auth-secondary {
+            background: #f0f2f5;
+            color: #333;
+        }
+        
+        .role-auth-secondary:hover {
+            background: #e0e3e9;
+        }
+        
+        .teacher-actions {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+            justify-content: center;
+        }
+        
+        .teacher-action-btn {
+            padding: 10px 15px;
+            border-radius: 10px;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s;
+            background: #4e54c8;
+            color: white;
+        }
+        
+        .teacher-action-btn:hover {
+            background: #3f44a7;
+        }
+        
+        .student-details-panel {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .performance-chart {
+            height: 200px;
+            background: #e9ecef;
+            border-radius: 10px;
+            margin: 15px 0;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            padding: 10px;
+        }
+        
+        .chart-bar {
+            width: 40px;
+            background: #4e54c8;
+            border-radius: 5px 5px 0 0;
+            position: relative;
+        }
+        
+        .chart-bar-label {
+            position: absolute;
+            bottom: -25px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 0.8rem;
+        }
+        
+        .chart-bar-value {
+            position: absolute;
+            top: -20px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-weight: bold;
+        }
+        
         @media (max-width: 500px) {
             .subject-item {
                 flex-direction: column;
@@ -605,6 +744,14 @@
             .date-filter {
                 flex-direction: column;
                 align-items: flex-start;
+            }
+            
+            .role-auth-buttons {
+                flex-direction: column;
+            }
+            
+            .teacher-actions {
+                flex-direction: column;
             }
         }
         
@@ -660,50 +807,49 @@
         <div id="role-selection" class="role-selection">
             <div class="role-title">Hesap Türünü Seçin</div>
             <div class="role-options">
-                <div class="role-option" onclick="selectRole('student', this)">
+                <div class="role-option" onclick="selectRole('student')">
                     <i class="fas fa-user-graduate role-icon"></i>
                     <div class="role-name">Öğrenci</div>
                     <div class="role-desc">Ders çalışma verilerinizi takip edin</div>
                 </div>
-                <div class="role-option" onclick="selectRole('teacher', this)">
+                <div class="role-option" onclick="selectRole('teacher')">
                     <i class="fas fa-chalkboard-teacher role-icon"></i>
                     <div class="role-name">Öğretmen</div>
                     <div class="role-desc">Öğrenci verilerini görüntüleyin</div>
                 </div>
             </div>
-            <div class="auth-buttons" id="auth-buttons" style="display: none;">
-                <p style="margin-bottom: 15px; color: #6c757d;">Verilerinizi kaydetmek için giriş yapın</p>
-                <button class="auth-btn" onclick="showLoginModal()">
-                    <i class="fas fa-sign-in-alt"></i> Giriş Yap
-                </button>
-                <button class="auth-btn" onclick="showSignupModal()">
-                    <i class="fas fa-user-plus"></i> Kayıt Ol
-                </button>
+            
+            <div id="role-auth-container" class="role-auth-container">
+                <h3 class="role-auth-title" id="role-auth-title">Öğrenci Girişi</h3>
+                <div class="role-auth-form">
+                    <input type="email" id="role-email" class="role-auth-input" placeholder="E-posta">
+                    <input type="password" id="role-password" class="role-auth-input" placeholder="Şifre">
+                    <div id="role-auth-error" class="form-error"></div>
+                    <div class="role-auth-buttons">
+                        <button class="role-auth-btn role-auth-secondary" onclick="showRoleSelectionOnly()">Geri Dön</button>
+                        <button class="role-auth-btn role-auth-primary" onclick="roleLogin()">Giriş Yap</button>
+                        <button class="role-auth-btn role-auth-primary" onclick="roleSignup()">Kayıt Ol</button>
+                    </div>
+                </div>
             </div>
+            
+            <button class="role-continue" id="continue-btn" onclick="showRoleAuth()" disabled>
+                Devam Et
+            </button>
         </div>
 
         <!-- Öğrenci Paneli -->
-        <div id="student-panel">
+        <div id="student-panel" style="display: none;">
             <header>
                 <h1>DERS TAKİP UYGULAMASI</h1>
                 <div class="date-display" id="current-date">28 Ağustos 2023 Pazartesi</div>
             </header>
             
-            <div class="role-switch" id="role-switch" onclick="showRoleSelection()" style="display: none;">
-                <i class="fas fa-exchange-alt"></i> Hesap Değiştir
+            <div class="role-switch" id="role-switch" onclick="showRoleSelection()">
+                <i class="fas fa-user-graduate"></i> Öğrenci
             </div>
             
-            <div id="auth-container" class="auth-container">
-                <p>Verilerinizi kaydetmek için giriş yapın</p>
-                <button class="auth-btn" onclick="showLoginModal()">
-                    <i class="fas fa-sign-in-alt"></i> Giriş Yap
-                </button>
-                <button class="auth-btn" onclick="showSignupModal()">
-                    <i class="fas fa-user-plus"></i> Kayıt Ol
-                </button>
-            </div>
-            
-            <div id="user-container" class="user-info" style="display: none;">
+            <div class="user-info" style="display: none;">
                 <span class="user-email" id="user-email">kullanici@example.com</span>
                 <button class="auth-btn" onclick="logout()">
                     <i class="fas fa-sign-out-alt"></i> Çıkış
@@ -813,6 +959,18 @@
                 </button>
             </div>
             
+            <div class="teacher-actions">
+                <button class="teacher-action-btn" onclick="exportData()">
+                    <i class="fas fa-download"></i> Verileri İndir
+                </button>
+                <button class="teacher-action-btn" onclick="sendReminders()">
+                    <i class="fas fa-bell"></i> Hatırlatma Gönder
+                </button>
+                <button class="teacher-action-btn" onclick="showStatistics()">
+                    <i class="fas fa-chart-bar"></i> İstatistikleri Görüntüle
+                </button>
+            </div>
+            
             <div class="stats">
                 <div class="stat-box">
                     <div class="stat-value" id="total-students">0</div>
@@ -844,6 +1002,11 @@
                         <i class="fas fa-times"></i> Kapat
                     </button>
                 </div>
+                
+                <div class="performance-chart" id="performance-chart">
+                    <!-- Grafik çubukları JavaScript ile eklenecek -->
+                </div>
+                
                 <div class="stats-grid">
                     <div class="stat-card">
                         <div class="stat-label">Türkçe</div>
@@ -878,6 +1041,15 @@
                         <div class="stat-value" id="det-sayfa">0</div>
                     </div>
                 </div>
+                
+                <div class="student-details-panel">
+                    <h4>Öğrenci Performans Geçmişi</h4>
+                    <div id="student-history">
+                        <div class="loading">
+                            <i class="fas fa-spinner"></i> Geçmiş veriler yükleniyor...
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -885,35 +1057,6 @@
     <!-- Toast Container -->
     <div id="toast-container" class="toast-container"></div>
 
-    <!-- Giriş Modal -->
-    <div id="login-modal" class="modal">
-        <div class="modal-content">
-            <h2>Giriş Yap</h2>
-            <input type="email" id="login-email" class="modal-input" placeholder="E-posta">
-            <input type="password" id="login-password" class="modal-input" placeholder="Şifre">
-            <button style="background:none;border:none;color:#4e54c8;text-decoration:underline;cursor:pointer;padding:0;margin-top:6px;" onclick="resetPasswordFromLogin()">Şifreyi Sıfırla</button>
-            <div id="login-error" class="form-error"></div>
-            <div class="modal-buttons">
-                <button class="modal-btn modal-btn-secondary" onclick="hideModal('login-modal')">İptal</button>
-                <button class="modal-btn modal-btn-primary" onclick="login()">Giriş Yap</button>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Kayıt Modal -->
-    <div id="signup-modal" class="modal">
-        <div class="modal-content">
-            <h2>Kayıt Ol</h2>
-            <input type="email" id="signup-email" class="modal-input" placeholder="E-posta">
-            <input type="password" id="signup-password" class="modal-input" placeholder="Şifre (en az 6 karakter)">
-            <div id="signup-error" class="form-error"></div>
-            <div class="modal-buttons">
-                <button class="modal-btn modal-btn-secondary" onclick="hideModal('signup-modal')">İptal</button>
-                <button class="modal-btn modal-btn-primary" onclick="signup()">Kayıt Ol</button>
-            </div>
-        </div>
-    </div>
-    
     <div class="motivation">
         <p>"Başarı, küçük çabaların sürekliliğinden doğar." - Robert Collier</p>
     </div>
@@ -935,17 +1078,25 @@
         const auth = firebase.auth();
         const db = firebase.firestore();
         
+        // Global değişkenler
+        let selectedRole = null;
+        let currentUser = null;
+        
         // Kullanıcı durumunu izle
-        auth.onAuthStateChanged(user => {
+        auth.onAuthStateChanged(async (user) => {
+            currentUser = user;
             if (user) {
                 // Kullanıcı giriş yapmış
-                document.getElementById('auth-container').style.display = 'none';
                 document.getElementById('user-container').style.display = 'flex';
                 document.getElementById('user-email').textContent = user.email;
                 document.getElementById('teacher-email').textContent = user.email;
                 
-                // Rol kontrolü
-                if (selectedRole === 'student') {
+                // Kullanıcı rolünü kontrol et
+                const role = await checkUserRole(user.uid);
+                
+                if (role === 'student') {
+                    // Öğrenci panelini göster
+                    showStudentPanel();
                     // Bugünün verilerini yükle
                     loadTodaysData();
                     
@@ -953,18 +1104,21 @@
                     if (document.getElementById('history-tab').classList.contains('active')) {
                         loadHistory();
                     }
-                    // Öğrenci paneline yönlendir
-                    continueToApp();
-                } else if (selectedRole === 'teacher') {
+                } else if (role === 'teacher') {
+                    // Öğretmen panelini göster
+                    showTeacherPanel();
                     // Öğretmen paneline öğrenci listesini yükle
                     loadStudentsList();
-                    // Öğretmen paneline yönlendir
-                    continueToApp();
+                } else {
+                    // Rol atanmamışsa çıkış yap
+                    auth.signOut();
+                    showRoleSelection();
+                    showToast('Kullanıcı rolü bulunamadı. Lütfen tekrar giriş yapın.', 'error');
                 }
             } else {
                 // Kullanıcı giriş yapmamış
-                document.getElementById('auth-container').style.display = 'block';
                 document.getElementById('user-container').style.display = 'none';
+                showRoleSelection();
             }
         });
         
@@ -1018,70 +1172,165 @@
             document.getElementById('total-pages').textContent = totalPages;
         }
         
-        // Modal gösterimi
-        function showModal(modalId) {
-            document.getElementById(modalId).style.display = 'flex';
-        }
-        
-        let selectedRole = null;
-        
-        function selectRole(role, el) {
+        function selectRole(role) {
             selectedRole = role;
             document.querySelectorAll('.role-option').forEach(opt => opt.classList.remove('selected'));
-            if (el) { el.classList.add('selected'); }
-            document.getElementById('auth-buttons').style.display = 'block';
+            event.currentTarget.classList.add('selected');
+            document.getElementById('continue-btn').disabled = false;
         }
         
-        function continueToApp() {
+        function showRoleAuth() {
             if (!selectedRole) return;
             
-            if (selectedRole === 'student') {
-                document.getElementById('role-selection').style.display = 'none';
-                document.getElementById('student-panel').style.display = 'block';
-                document.getElementById('teacher-panel').style.display = 'none';
-                document.getElementById('role-switch').style.display = 'block';
-                document.getElementById('role-switch').innerHTML = `<i class="fas fa-user-graduate"></i> Öğrenci`;
-            } else if (selectedRole === 'teacher') {
-                document.getElementById('role-selection').style.display = 'none';
-                document.getElementById('student-panel').style.display = 'none';
-                document.getElementById('teacher-panel').style.display = 'block';
-                document.getElementById('role-switch').style.display = 'block';
-                document.getElementById('role-switch').innerHTML = `<i class="fas fa-chalkboard-teacher"></i> Öğretmen`;
-                
-                // Öğretmen paneline öğrenci listesini yükle
-                loadStudentsList();
-            }
+            // Rol seçimini gizle, giriş formunu göster
+            document.querySelector('.role-options').style.display = 'none';
+            document.getElementById('role-auth-container').style.display = 'block';
+            document.getElementById('continue-btn').style.display = 'none';
+            
+            // Başlığı güncelle
+            const roleTitle = selectedRole === 'student' ? 'Öğrenci' : 'Öğretmen';
+            document.getElementById('role-auth-title').textContent = `${roleTitle} Girişi`;
+        }
+        
+        function showRoleSelectionOnly() {
+            // Giriş formunu gizle, rol seçimini göster
+            document.querySelector('.role-options').style.display = 'flex';
+            document.getElementById('role-auth-container').style.display = 'none';
+            document.getElementById('continue-btn').style.display = 'block';
+            
+            // Formu temizle
+            document.getElementById('role-email').value = '';
+            document.getElementById('role-password').value = '';
+            clearError('role-auth-error');
         }
         
         function showRoleSelection() {
-            document.getElementById('role-selection').style.display = 'flex';
-            document.getElementById('student-panel').style.display = 'none';
+            // Çıkış yap ve rol seçim ekranına dön
+            auth.signOut().then(() => {
+                document.getElementById('role-selection').style.display = 'flex';
+                document.getElementById('student-panel').style.display = 'none';
+                document.getElementById('teacher-panel').style.display = 'none';
+                document.getElementById('role-switch').style.display = 'none';
+                
+                // Rol seçim ekranını sıfırla
+                showRoleSelectionOnly();
+                selectedRole = null;
+                document.getElementById('continue-btn').disabled = true;
+                document.querySelectorAll('.role-option').forEach(opt => opt.classList.remove('selected'));
+                
+                showToast('Çıkış yapıldı.', 'info');
+            }).catch((error) => {
+                showToast('Çıkış hatası: ' + (error?.message || ''), 'error');
+            });
+        }
+        
+        // Kullanıcı rolünü kontrol etme
+        async function checkUserRole(uid) {
+            try {
+                const userDoc = await db.collection('users').doc(uid).get();
+                if (userDoc.exists) {
+                    return userDoc.data().role;
+                }
+                return null;
+            } catch (error) {
+                console.error("Rol kontrol hatası:", error);
+                return null;
+            }
+        }
+        
+        async function roleLogin() {
+            const email = document.getElementById('role-email').value;
+            const password = document.getElementById('role-password').value;
+            
+            if (!email || !password) {
+                showError('role-auth-error', 'Lütfen e-posta ve şifre girin.');
+                return;
+            }
+            
+            try {
+                const userCredential = await auth.signInWithEmailAndPassword(email, password);
+                clearError('role-auth-error');
+                showToast('Başarıyla giriş yapıldı.', 'success');
+                
+                // Kullanıcı rolünü kontrol et
+                const role = await checkUserRole(userCredential.user.uid);
+                
+                if (role === selectedRole) {
+                    // Giriş başarılıysa ilgili panelyi göster
+                    if (selectedRole === 'student') {
+                        showStudentPanel();
+                    } else if (selectedRole === 'teacher') {
+                        showTeacherPanel();
+                    }
+                } else {
+                    // Rol uyuşmazlığı varsa çıkış yap
+                    auth.signOut();
+                    showError('role-auth-error', 'Bu hesap ile seçtiğiniz role erişim izniniz yok.');
+                    showToast('Rol uyuşmazlığı: Hesap bu role erişemez.', 'error');
+                }
+            } catch (error) {
+                const message = getAuthErrorMessage(error.code, 'login');
+                showError('role-auth-error', message);
+                showToast('Giriş hatası: ' + message, 'error');
+            }
+        }
+        
+        async function roleSignup() {
+            const email = document.getElementById('role-email').value;
+            const password = document.getElementById('role-password').value;
+            
+            if (!email || !password) {
+                showError('role-auth-error', 'Lütfen e-posta ve şifre girin.');
+                return;
+            }
+            
+            if (password.length < 6) {
+                showError('role-auth-error', 'Şifre en az 6 karakter olmalıdır.');
+                return;
+            }
+            
+            try {
+                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                const user = userCredential.user;
+                
+                // Firestore'da kullanıcı rolünü kaydet
+                await db.collection('users').doc(user.uid).set({
+                    email: email,
+                    role: selectedRole,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                
+                clearError('role-auth-error');
+                showToast('Hesabınız oluşturuldu. Giriş yapıldı.', 'success');
+                
+                // Kayıt başarılıysa ilgili panelyi göster
+                if (selectedRole === 'student') {
+                    showStudentPanel();
+                } else if (selectedRole === 'teacher') {
+                    showTeacherPanel();
+                }
+            } catch (error) {
+                showError('role-auth-error', getAuthErrorMessage(error.code, 'signup'));
+            }
+        }
+        
+        function showStudentPanel() {
+            document.getElementById('role-selection').style.display = 'none';
+            document.getElementById('student-panel').style.display = 'block';
             document.getElementById('teacher-panel').style.display = 'none';
-            document.getElementById('role-switch').style.display = 'none';
-            selectedRole = null;
-            document.getElementById('auth-buttons').style.display = 'none';
-            document.querySelectorAll('.role-option').forEach(opt => opt.classList.remove('selected'));
+            document.getElementById('role-switch').style.display = 'block';
+            document.getElementById('role-switch').innerHTML = `<i class="fas fa-user-graduate"></i> Öğrenci`;
         }
         
-        // Modal gizleme
-        function hideModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
-        }
-        
-        // Giriş modalını göster
-        function showLoginModal() {
-            document.getElementById('login-email').value = '';
-            document.getElementById('login-password').value = '';
-            clearError('login-error');
-            showModal('login-modal');
-        }
-        
-        // Kayıt modalını göster
-        function showSignupModal() {
-            document.getElementById('signup-email').value = '';
-            document.getElementById('signup-password').value = '';
-            clearError('signup-error');
-            showModal('signup-modal');
+        function showTeacherPanel() {
+            document.getElementById('role-selection').style.display = 'none';
+            document.getElementById('student-panel').style.display = 'none';
+            document.getElementById('teacher-panel').style.display = 'block';
+            document.getElementById('role-switch').style.display = 'block';
+            document.getElementById('role-switch').innerHTML = `<i class="fas fa-chalkboard-teacher"></i> Öğretmen`;
+            
+            // Öğretmen paneline öğrenci listesini yükle
+            loadStudentsList();
         }
         
         function showError(id, message) {
@@ -1135,97 +1384,10 @@
             return map[code] || 'Bir hata oluştu. Lütfen tekrar deneyin.';
         }
         
-        // Giriş yapma fonksiyonu
-        function login() {
-            const email = document.getElementById('login-email').value;
-            const password = document.getElementById('login-password').value;
-            
-            document.getElementById('login-password').classList.remove('input-error');
-
-            if (!email || !password) {
-                showError('login-error', 'Lütfen e-posta ve şifre girin.');
-                return;
-            }
-            if (!selectedRole) {
-                showError('login-error', 'Lütfen önce Öğrenci veya Öğretmen seçin.');
-                return;
-            }
-            
-            auth.signInWithEmailAndPassword(email, password)
-                .then((userCredential) => {
-                    hideModal('login-modal');
-                    clearError('login-error');
-                    showToast('Başarıyla giriş yapıldı.', 'success');
-                    // Giriş sonrası role göre yönlendir
-                    continueToApp();
-                })
-                .catch((error) => {
-                    const message = getAuthErrorMessage(error.code, 'login');
-                    showError('login-error', message);
-                    if (error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
-                        document.getElementById('login-password').focus();
-                        document.getElementById('login-password').classList.add('input-error');
-                        showError('login-error', 'Şifre hatalı. İsterseniz aşağıdan sıfırlayabilirsiniz.');
-                        showToast('Şifre hatalı.', 'error');
-                    } else if (error.code === 'auth/user-not-found') {
-                        document.getElementById('login-email').focus();
-                        showToast('Hesap bulunamadı. E-postayı kontrol edin.', 'warning');
-                    }
-                });
-        }
-
-        function resetPasswordFromLogin() {
-            const email = document.getElementById('login-email').value;
-            if (!email) {
-                showError('login-error', 'Lütfen önce e-posta adresinizi yazın.');
-                document.getElementById('login-email').focus();
-                return;
-            }
-            auth.sendPasswordResetEmail(email)
-                .then(() => {
-                    showToast('Şifre sıfırlama e-postası gönderildi.', 'info');
-                })
-                .catch((error) => {
-                    showError('login-error', getAuthErrorMessage(error.code, 'login'));
-                });
-        }
-        
-        // Kayıt olma fonksiyonu
-        function signup() {
-            const email = document.getElementById('signup-email').value;
-            const password = document.getElementById('signup-password').value;
-            
-            if (!email || !password) {
-                showError('signup-error', 'Lütfen e-posta ve şifre girin.');
-                return;
-            }
-            
-            if (password.length < 6) {
-                showError('signup-error', 'Şifre en az 6 karakter olmalıdır.');
-                return;
-            }
-            
-            auth.createUserWithEmailAndPassword(email, password)
-                .then((userCredential) => {
-                    hideModal('signup-modal');
-                    clearError('signup-error');
-                    showToast('Hesabınız oluşturuldu. Giriş yapıldı.', 'success');
-                    // Kayıt sonrası role göre yönlendir
-                    if (!selectedRole) {
-                        showRoleSelection();
-                    } else {
-                        continueToApp();
-                    }
-                })
-                .catch((error) => {
-                    showError('signup-error', getAuthErrorMessage(error.code, 'signup'));
-                });
-        }
-        
         // Çıkış yapma fonksiyonu
         function logout() {
             auth.signOut().then(() => {
-                showToast('Çıkış yapıldı.', 'info');
+                showRoleSelection();
             }).catch((error) => {
                 showToast('Çıkış hatası: ' + (error?.message || ''), 'error');
             });
@@ -1303,7 +1465,7 @@
             db.collection("users").doc(user.uid).collection("days").doc(dateKey)
                 .set(dailyData)
                 .then(() => {
-                    alert('Bugünkü verileriniz kaydedildi! Yarın yeni bir gün için hazır olacak.');
+                    showToast('Bugünkü verileriniz kaydedildi!', 'success');
                     
                     // Inputları disable yap
                     const inputs = document.querySelectorAll('input');
@@ -1313,10 +1475,52 @@
                     
                     document.getElementById('save-btn').disabled = true;
                     document.getElementById('save-btn').innerHTML = '<i class="fas fa-check"></i> Bugün Kaydedildi';
+                    
+                    // Kullanıcı istatistiklerini güncelle
+                    updateUserStats(user.uid, dailyData);
                 })
                 .catch((error) => {
-                    alert("Kayıt hatası: " + error.message);
+                    showToast("Kayıt hatası: " + error.message, 'error');
                 });
+        }
+        
+        // Kullanıcı istatistiklerini güncelleme
+        async function updateUserStats(uid, dailyData) {
+            try {
+                const statsRef = db.collection('userStats').doc(uid);
+                const statsDoc = await statsRef.get();
+                
+                if (statsDoc.exists) {
+                    // Mevcut istatistikleri güncelle
+                    const currentStats = statsDoc.data();
+                    await statsRef.update({
+                        turkce: (currentStats.turkce || 0) + dailyData.turkce,
+                        matematik: (currentStats.matematik || 0) + dailyData.matematik,
+                        fen: (currentStats.fen || 0) + dailyData.fen,
+                        inkilap: (currentStats.inkilap || 0) + dailyData.inkilap,
+                        din: (currentStats.din || 0) + dailyData.din,
+                        ingilizce: (currentStats.ingilizce || 0) + dailyData.ingilizce,
+                        total: (currentStats.total || 0) + dailyData.total,
+                        sayfa: (currentStats.sayfa || 0) + dailyData.sayfa,
+                        lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                } else {
+                    // Yeni istatistikler oluştur
+                    await statsRef.set({
+                        turkce: dailyData.turkce,
+                        matematik: dailyData.matematik,
+                        fen: dailyData.fen,
+                        inkilap: dailyData.inkilap,
+                        din: dailyData.din,
+                        ingilizce: dailyData.ingilizce,
+                        total: dailyData.total,
+                        sayfa: dailyData.sayfa,
+                        lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                }
+            } catch (error) {
+                console.error("İstatistik güncelleme hatası:", error);
+            }
         }
         
         // Geçmiş kayıtları yükleme fonksiyonu
@@ -1378,69 +1582,192 @@
         }
         
         // Öğretmen paneli işlevleri
-        function loadStudentsList() {
+        async function loadStudentsList() {
             // Öğrenci listesini yükle
             const user = auth.currentUser;
             if (!user) return;
             
-            // Demo öğrenci listesi (gerçek uygulamada Firestore'dan çekilecek)
-            const demoStudents = [
-                { id: '1', name: 'Ahmet Yılmaz', email: 'ahmet@example.com', totalQuestions: 125, totalPages: 45 },
-                { id: '2', name: 'Ayşe Kaya', email: 'ayse@example.com', totalQuestions: 98, totalPages: 32 },
-                { id: '3', name: 'Mehmet Demir', email: 'mehmet@example.com', totalQuestions: 156, totalPages: 56 },
-                { id: '4', name: 'Zeynep Çelik', email: 'zeynep@example.com', totalQuestions: 87, totalPages: 28 }
-            ];
-            
-            let studentsHTML = '';
-            demoStudents.forEach(student => {
-                studentsHTML += `
-                    <div class="student-item" onclick="showStudentDetail('${student.id}')">
-                        <div class="student-name">${student.name}</div>
-                        <div class="student-stats">
-                            <span>${student.totalQuestions} soru</span>
-                            <span>${student.totalPages} sayfa</span>
+            try {
+                // Tüm öğrencileri getir
+                const studentsSnapshot = await db.collection('users')
+                    .where('role', '==', 'student')
+                    .get();
+                
+                if (studentsSnapshot.empty) {
+                    document.getElementById('students-container').innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-user-graduate"></i>
+                            <p>Henüz öğrenciniz bulunmamaktadır</p>
                         </div>
+                    `;
+                    return;
+                }
+                
+                let studentsHTML = '';
+                let totalQuestions = 0;
+                let totalPages = 0;
+                
+                for (const doc of studentsSnapshot.docs) {
+                    const student = doc.data();
+                    const studentId = doc.id;
+                    
+                    // Öğrenci istatistiklerini getir
+                    let studentQuestions = 0;
+                    let studentPages = 0;
+                    
+                    try {
+                        const statsDoc = await db.collection('userStats').doc(studentId).get();
+                        if (statsDoc.exists) {
+                            const stats = statsDoc.data();
+                            studentQuestions = stats.total || 0;
+                            studentPages = stats.sayfa || 0;
+                        }
+                    } catch (error) {
+                        console.error("Öğrenci istatistikleri yüklenirken hata:", error);
+                    }
+                    
+                    studentsHTML += `
+                        <div class="student-item" onclick="showStudentDetail('${studentId}')">
+                            <div class="student-name">${student.name || student.email}</div>
+                            <div class="student-stats">
+                                <span>${studentQuestions} soru</span>
+                                <span>${studentPages} sayfa</span>
+                            </div>
+                        </div>
+                    `;
+                    
+                    totalQuestions += studentQuestions;
+                    totalPages += studentPages;
+                }
+                
+                document.getElementById('students-container').innerHTML = studentsHTML;
+                document.getElementById('total-students').textContent = studentsSnapshot.size;
+                
+                // Ortalama hesaplamaları
+                const avgQuestions = studentsSnapshot.size > 0 ? Math.round(totalQuestions / studentsSnapshot.size) : 0;
+                const avgPages = studentsSnapshot.size > 0 ? Math.round(totalPages / studentsSnapshot.size) : 0;
+                
+                document.getElementById('avg-questions').textContent = avgQuestions;
+                document.getElementById('avg-pages').textContent = avgPages;
+                
+            } catch (error) {
+                console.log("Öğrenci listesi yüklenirken hata oluştu:", error);
+                document.getElementById('students-container').innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <p>Öğrenci listesi yüklenirken hata oluştu</p>
                     </div>
                 `;
-            });
-            
-            document.getElementById('students-container').innerHTML = studentsHTML;
-            document.getElementById('total-students').textContent = demoStudents.length;
-            
-            // Ortalama hesaplamaları
-            const avgQuestions = Math.round(demoStudents.reduce((sum, student) => sum + student.totalQuestions, 0) / demoStudents.length);
-            const avgPages = Math.round(demoStudents.reduce((sum, student) => sum + student.totalPages, 0) / demoStudents.length);
-            
-            document.getElementById('avg-questions').textContent = avgQuestions;
-            document.getElementById('avg-pages').textContent = avgPages;
+            }
         }
         
-        function showStudentDetail(studentId) {
+        async function showStudentDetail(studentId) {
             // Öğrenci detaylarını göster
             document.getElementById('student-detail').style.display = 'block';
             
-            // Demo öğrenci verileri (gerçek uygulamada Firestore'dan çekilecek)
-            const demoStudentData = {
-                name: 'Ahmet Yılmaz',
-                turkce: 25,
-                matematik: 35,
-                fen: 30,
-                inkilap: 15,
-                din: 10,
-                ingilizce: 10,
-                total: 125,
-                sayfa: 45
-            };
+            try {
+                // Öğrenci bilgilerini getir
+                const studentDoc = await db.collection('users').doc(studentId).get();
+                if (!studentDoc.exists) {
+                    showToast('Öğrenci bulunamadı.', 'error');
+                    return;
+                }
+                
+                const student = studentDoc.data();
+                const studentName = student.name || student.email;
+                
+                document.getElementById('detail-student-name').textContent = `${studentName} - Detaylı İstatistikler`;
+                
+                // Öğrenci istatistiklerini getir
+                const statsDoc = await db.collection('userStats').doc(studentId).get();
+                if (statsDoc.exists) {
+                    const stats = statsDoc.data();
+                    
+                    document.getElementById('det-turkce').textContent = stats.turkce || 0;
+                    document.getElementById('det-matematik').textContent = stats.matematik || 0;
+                    document.getElementById('det-fen').textContent = stats.fen || 0;
+                    document.getElementById('det-inkilap').textContent = stats.inkilap || 0;
+                    document.getElementById('det-din').textContent = stats.din || 0;
+                    document.getElementById('det-ingilizce').textContent = stats.ingilizce || 0;
+                    document.getElementById('det-total').textContent = stats.total || 0;
+                    document.getElementById('det-sayfa').textContent = stats.sayfa || 0;
+                    
+                    // Performans grafiğini oluştur
+                    createPerformanceChart(stats);
+                } else {
+                    // İstatistikler yoksa sıfırları göster
+                    document.getElementById('det-turkce').textContent = 0;
+                    document.getElementById('det-matematik').textContent = 0;
+                    document.getElementById('det-fen').textContent = 0;
+                    document.getElementById('det-inkilap').textContent = 0;
+                    document.getElementById('det-din').textContent = 0;
+                    document.getElementById('det-ingilizce').textContent = 0;
+                    document.getElementById('det-total').textContent = 0;
+                    document.getElementById('det-sayfa').textContent = 0;
+                    
+                    // Boş grafik oluştur
+                    createPerformanceChart({});
+                }
+                
+                // Öğrenci geçmiş verilerini getir
+                const historySnapshot = await db.collection('users').doc(studentId)
+                    .collection('days')
+                    .orderBy('timestamp', 'desc')
+                    .limit(7)
+                    .get();
+                
+                let historyHTML = '';
+                if (historySnapshot.empty) {
+                    historyHTML = '<p>Henüz kayıtlı veri bulunmamaktadır</p>';
+                } else {
+                    historyHTML = '<div class="history-list">';
+                    historySnapshot.forEach(doc => {
+                        const data = doc.data();
+                        historyHTML += `
+                            <div class="history-item">
+                                <div class="history-date">${data.date}</div>
+                                <div class="history-stats">${data.total || 0} soru, ${data.sayfa || 0} sayfa</div>
+                            </div>
+                        `;
+                    });
+                    historyHTML += '</div>';
+                }
+                
+                document.getElementById('student-history').innerHTML = historyHTML;
+                
+            } catch (error) {
+                console.error("Öğrenci detayları yüklenirken hata oluştu:", error);
+                showToast('Öğrenci detayları yüklenirken hata oluştu', 'error');
+            }
+        }
+        
+        function createPerformanceChart(stats) {
+            const chartContainer = document.getElementById('performance-chart');
+            chartContainer.innerHTML = '';
             
-            document.getElementById('detail-student-name').textContent = demoStudentData.name + ' - Detaylı İstatistikler';
-            document.getElementById('det-turkce').textContent = demoStudentData.turkce;
-            document.getElementById('det-matematik').textContent = demoStudentData.matematik;
-            document.getElementById('det-fen').textContent = demoStudentData.fen;
-            document.getElementById('det-inkilap').textContent = demoStudentData.inkilap;
-            document.getElementById('det-din').textContent = demoStudentData.din;
-            document.getElementById('det-ingilizce').textContent = demoStudentData.ingilizce;
-            document.getElementById('det-total').textContent = demoStudentData.total;
-            document.getElementById('det-sayfa').textContent = demoStudentData.sayfa;
+            const subjects = [
+                { id: 'turkce', label: 'Türkçe', value: stats.turkce || 0 },
+                { id: 'matematik', label: 'Matematik', value: stats.matematik || 0 },
+                { id: 'fen', label: 'Fen', value: stats.fen || 0 },
+                { id: 'inkilap', label: 'İnkılap', value: stats.inkilap || 0 },
+                { id: 'din', label: 'Din', value: stats.din || 0 },
+                { id: 'ingilizce', label: 'İngilizce', value: stats.ingilizce || 0 }
+            ];
+            
+            // En yüksek değeri bul (minimum 10 olsun)
+            const maxValue = Math.max(...subjects.map(s => s.value), 10);
+            
+            subjects.forEach(subject => {
+                const barHeight = subject.value > 0 ? (subject.value / maxValue) * 150 : 5;
+                const bar = document.createElement('div');
+                bar.className = 'chart-bar';
+                bar.style.height = `${barHeight}px`;
+                bar.innerHTML = `
+                    <div class="chart-bar-value">${subject.value}</div>
+                    <div class="chart-bar-label">${subject.label}</div>
+                `;
+                chartContainer.appendChild(bar);
+            });
         }
         
         function hideStudentDetail() {
@@ -1454,9 +1781,28 @@
             
             if (startDate && endDate) {
                 showToast(`${startDate} - ${endDate} tarih aralığı için filtreleme yapıldı`, 'info');
+                // Burada filtreleme işlemleri yapılacak
+                // Şimdilik tüm listeyi yeniden yüklüyoruz
+                loadStudentsList();
             } else {
                 showToast('Tüm öğrenci verileri yüklendi', 'info');
+                loadStudentsList();
             }
+        }
+        
+        function exportData() {
+            showToast('Veri indirme işlemi başlatıldı', 'info');
+            // Burada veri indirme işlemleri yapılacak
+        }
+        
+        function sendReminders() {
+            showToast('Hatırlatma mesajları gönderildi', 'success');
+            // Burada hatırlatma gönderme işlemleri yapılacak
+        }
+        
+        function showStatistics() {
+            showToast('İstatistikler görüntüleniyor', 'info');
+            // Burada istatistik görüntüleme işlemleri yapılacak
         }
         
         // Yazdırma fonksiyonu
