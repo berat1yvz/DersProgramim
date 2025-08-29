@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ders Çalışma Takip Uygulaması</title>
+    <title>I'Koch</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -312,16 +312,26 @@
             display: flex;
             background: #f8f9fa;
             border-bottom: 1px solid #e9ecef;
+            overflow-x: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            white-space: nowrap;
+        }
+        
+        .tabs::-webkit-scrollbar {
+            display: none;
         }
         
         .tab {
-            flex: 1;
+            flex: 0 0 auto;
+            min-width: 120px;
             text-align: center;
-            padding: 15px;
+            padding: 15px 20px;
             font-weight: 500;
             cursor: pointer;
             transition: all 0.3s;
             color: #6c757d;
+            white-space: nowrap;
         }
         
         .tab.active {
@@ -429,102 +439,206 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 60vh;
+            min-height: 70vh;
             padding: 40px 20px;
             text-align: center;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
         }
         
         .role-title {
-            font-size: 1.8rem;
-            font-weight: 600;
-            margin-bottom: 30px;
-            color: #4e54c8;
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -1px;
+            line-height: 1;
+            position: relative;
+            text-align: center;
+            filter: drop-shadow(0 2px 4px rgba(102, 126, 234, 0.3));
+        }
+        
+        .role-title::before {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 5px;
+            background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+            border-radius: 3px;
+            opacity: 0.8;
+        }
+        
+        .role-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 2px;
+            opacity: 0.6;
+        }
+        
+        .role-subtitle {
+            font-size: 1.1rem;
+            color: rgba(255,255,255,0.85);
+            margin-bottom: 40px;
+            font-weight: 400;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+            line-height: 1.4;
+            letter-spacing: 0.1px;
+            opacity: 0.9;
         }
         
         .role-options {
             display: flex;
-            gap: 20px;
-            margin-bottom: 30px;
+            gap: 25px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            justify-content: center;
         }
         
         .role-option {
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 25px;
-            border: 2px solid #e5e7eb;
-            border-radius: 15px;
-            background: white;
+            padding: 30px 25px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 20px;
+            background: rgba(255,255,255,0.95);
             cursor: pointer;
-            transition: all 0.3s;
-            min-width: 140px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            min-width: 160px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .role-option::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(78, 84, 200, 0.1), transparent);
+            transition: left 0.5s;
+        }
+        
+        .role-option:hover::before {
+            left: 100%;
         }
         
         .role-option:hover {
             border-color: #4e54c8;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(78, 84, 200, 0.15);
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 15px 35px rgba(78, 84, 200, 0.25);
         }
         
         .role-option.selected {
             border-color: #4e54c8;
-            background: #f8f9ff;
+            background: linear-gradient(135deg, #f8f9ff 0%, #e8f0ff 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(78, 84, 200, 0.2);
         }
         
         .role-icon {
-            font-size: 2.5rem;
-            margin-bottom: 15px;
+            font-size: 3rem;
+            margin-bottom: 20px;
             color: #4e54c8;
-        }
-        
-        .role-name {
-            font-weight: 600;
-            font-size: 1.1rem;
-            margin-bottom: 8px;
-        }
-        
-        .role-desc {
-            font-size: 0.9rem;
-            color: #6c757d;
-            line-height: 1.4;
-        }
-        
-        .role-continue {
-            padding: 12px 30px;
-            background: #4e54c8;
-            color: white;
-            border: none;
-            border-radius: 25px;
-            font-weight: 500;
-            cursor: pointer;
             transition: all 0.3s;
         }
         
+        .role-option:hover .role-icon {
+            transform: scale(1.1);
+        }
+        
+        .role-name {
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: #2d3748;
+        }
+        
+        .role-desc {
+            font-size: 0.95rem;
+            color: #718096;
+            line-height: 1.5;
+            max-width: 140px;
+        }
+        
+        .role-continue {
+            padding: 15px 40px;
+            background: linear-gradient(135deg, #4e54c8 0%, #8f94fb 100%);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 8px 20px rgba(78, 84, 200, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .role-continue::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .role-continue:hover::before {
+            left: 100%;
+        }
+        
         .role-continue:hover {
-            background: #3f44a7;
+            background: linear-gradient(135deg, #3f44a7 0%, #7c83e8 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(78, 84, 200, 0.4);
         }
         
         .role-continue:disabled {
-            background: #ccc;
+            background: linear-gradient(135deg, #cbd5e0 0%, #a0aec0 100%);
             cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
         }
         
         .role-switch {
             position: absolute;
-            top: 15px;
-            right: 15px;
-            background: rgba(255, 255, 255, 0.9);
-            border: 1px solid #e5e7eb;
-            border-radius: 20px;
-            padding: 8px 15px;
-            font-size: 0.85rem;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(78, 84, 200, 0.2);
+            border-radius: 25px;
+            padding: 10px 20px;
+            font-size: 0.9rem;
             cursor: default;
             transition: all 0.3s;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
         
         .role-switch:hover {
             background: white;
             border-color: #4e54c8;
+            transform: translateY(-1px);
         }
         
         /* Öğretmen paneli stilleri */
@@ -550,56 +664,105 @@
             transform: translateY(-2px);
         }
 
-        /* Sınıf kartları */
+        /* Modern Sınıf kartları */
         .classes-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 12px;
-            margin-top: 12px;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
         }
         .class-card {
-            background: #f8f9fa;
-            border-radius: 12px;
-            padding: 12px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            border: 2px solid #e9ecef;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .class-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #4e54c8, #8f94fb);
+        }
+        .class-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(78, 84, 200, 0.15);
+            border-color: #4e54c8;
         }
         .class-card-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 8px;
+            margin-bottom: 15px;
         }
         .class-name {
-            font-weight: 600;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: #2d3748;
         }
         .class-count-badge {
-            background: #4e54c8;
+            background: linear-gradient(135deg, #4e54c8, #8f94fb);
             color: #fff;
-            padding: 2px 8px;
-            border-radius: 999px;
-            font-size: 0.8rem;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(78, 84, 200, 0.3);
         }
         .class-card-actions {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 8px;
-            margin-top: 8px;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .class-card-actions .veriler-btn {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, #4e54c8, #8f94fb) !important;
+            font-size: 0.9rem !important;
+            padding: 12px 15px !important;
+            font-weight: 700 !important;
+            box-shadow: 0 4px 15px rgba(78, 84, 200, 0.3) !important;
+        }
+        
+        .class-card-actions .veriler-btn:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 6px 20px rgba(78, 84, 200, 0.4) !important;
         }
         .class-card-actions .small-btn {
-            padding: 8px 10px;
-            border-radius: 8px;
+            padding: 10px 12px;
+            border-radius: 10px;
             border: none;
             cursor: pointer;
-            background: #4e54c8;
+            background: linear-gradient(135deg, #4e54c8, #8f94fb);
             color: #fff;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
+            font-weight: 600;
             display: inline-flex;
             align-items: center;
             gap: 6px;
             justify-content: center;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(78, 84, 200, 0.2);
         }
-        .class-card-actions .small-btn.secondary { background: #6b7280; }
-        .class-card-actions .small-btn.danger { background: #dc2626; }
+        .class-card-actions .small-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(78, 84, 200, 0.3);
+        }
+        .class-card-actions .small-btn.secondary { 
+            background: linear-gradient(135deg, #6b7280, #9ca3af);
+            box-shadow: 0 2px 8px rgba(107, 114, 128, 0.2);
+        }
+        .class-card-actions .small-btn.danger { 
+            background: linear-gradient(135deg, #dc2626, #ef4444);
+            box-shadow: 0 2px 8px rgba(220, 38, 38, 0.2);
+        }
         
         .student-name {
             font-weight: 500;
@@ -662,72 +825,127 @@
         /* Rol seçiminde giriş formu stilleri */
         .role-auth-container {
             width: 100%;
-            max-width: 400px;
-            margin-top: 20px;
-            padding: 20px;
-            background: #f8f9fa;
-            border-radius: 15px;
+            max-width: 450px;
+            margin-top: 30px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
             display: none;
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            animation: slideInUp 0.5s ease-out;
+        }
+        
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         
         .role-auth-title {
             text-align: center;
-            margin-bottom: 20px;
-            color: #4e54c8;
-            font-weight: 600;
+            margin-bottom: 25px;
+            color: #2d3748;
+            font-weight: 700;
+            font-size: 1.5rem;
         }
         
         .role-auth-form {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 20px;
+        }
+        
+        .role-auth-input-group {
+            position: relative;
         }
         
         .role-auth-input {
-            padding: 12px 15px;
-            border: 2px solid #ddd;
-            border-radius: 10px;
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
             font-size: 1rem;
-            transition: border-color 0.3s;
+            transition: all 0.3s;
+            background: rgba(255, 255, 255, 0.9);
+            box-sizing: border-box;
         }
         
         .role-auth-input:focus {
             border-color: #4e54c8;
             outline: none;
+            box-shadow: 0 0 0 3px rgba(78, 84, 200, 0.1);
+            background: white;
+        }
+        
+        .role-auth-input::placeholder {
+            color: #a0aec0;
         }
         
         .role-auth-buttons {
             display: flex;
-            gap: 10px;
+            gap: 15px;
             justify-content: center;
-            margin-top: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
         }
         
         .role-auth-btn {
-            padding: 12px 20px;
-            border-radius: 10px;
+            padding: 14px 25px;
+            border-radius: 12px;
             border: none;
-            font-weight: 500;
+            font-weight: 600;
+            font-size: 1rem;
             cursor: pointer;
             transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            min-width: 120px;
+        }
+        
+        .role-auth-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .role-auth-btn:hover::before {
+            left: 100%;
         }
         
         .role-auth-primary {
-            background: #4e54c8;
+            background: linear-gradient(135deg, #4e54c8 0%, #8f94fb 100%);
             color: white;
+            box-shadow: 0 4px 15px rgba(78, 84, 200, 0.3);
         }
         
         .role-auth-primary:hover {
-            background: #3f44a7;
+            background: linear-gradient(135deg, #3f44a7 0%, #7c83e8 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(78, 84, 200, 0.4);
         }
         
         .role-auth-secondary {
-            background: #f0f2f5;
-            color: #333;
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            color: #4a5568;
+            border: 2px solid #e2e8f0;
         }
         
         .role-auth-secondary:hover {
-            background: #e0e3e9;
+            background: linear-gradient(135deg, #edf2f7 0%, #e2e8f0 100%);
+            border-color: #cbd5e0;
+            transform: translateY(-1px);
         }
         
         .teacher-actions {
@@ -820,6 +1038,38 @@
             
             .role-options {
                 flex-direction: column;
+                gap: 15px;
+            }
+            
+            .role-option {
+                min-width: auto;
+                width: 100%;
+                max-width: 280px;
+            }
+            
+            .role-selection {
+                padding: 20px 15px;
+                min-height: 60vh;
+            }
+            
+            .role-title {
+                font-size: 2.8rem;
+                margin-bottom: 40px;
+            }
+            
+            .role-title::before {
+                width: 60px;
+                height: 4px;
+            }
+            
+            .role-title::after {
+                width: 45px;
+                height: 3px;
+            }
+            
+            .role-auth-container {
+                padding: 20px;
+                margin-top: 20px;
             }
             
             .date-filter {
@@ -829,10 +1079,32 @@
             
             .role-auth-buttons {
                 flex-direction: column;
+                gap: 10px;
+            }
+            
+            .role-auth-btn {
+                width: 100%;
             }
             
             .teacher-actions {
                 flex-direction: column;
+            }
+            
+            .tabs {
+                overflow-x: auto;
+                scrollbar-width: none;
+                -ms-overflow-style: none;
+            }
+            
+            .tabs::-webkit-scrollbar {
+                display: none;
+            }
+            
+            .tab {
+                flex: 0 0 auto;
+                min-width: 100px;
+                padding: 12px 15px;
+                font-size: 0.9rem;
             }
         }
         
@@ -910,43 +1182,54 @@
 <body>
     <div class="container">
         <div id="role-selection" class="role-selection">
-            <div class="role-title">Hesap Türünü Seçin</div>
+            <div class="role-title">Hoş Geldiniz!</div>
+            
             <div class="role-options">
                 <div class="role-option" onclick="selectRole('student')">
                     <i class="fas fa-user-graduate role-icon"></i>
                     <div class="role-name">Öğrenci</div>
-                    <div class="role-desc">Ders çalışma verilerinizi takip edin</div>
+                    <div class="role-desc">Çalışma verilerinizi takip edin ve hedeflerinizi belirleyin</div>
                 </div>
                 <div class="role-option" onclick="selectRole('teacher')">
                     <i class="fas fa-chalkboard-teacher role-icon"></i>
                     <div class="role-name">Öğretmen</div>
-                    <div class="role-desc">Öğrenci verilerini görüntüleyin</div>
+                    <div class="role-desc">Öğrenci verilerini görüntüleyin ve sınıf yönetimi yapın</div>
                 </div>
             </div>
             
             <div id="role-auth-container" class="role-auth-container">
                 <h3 class="role-auth-title" id="role-auth-title">Öğrenci Girişi</h3>
                 <div class="role-auth-form">
-                    <input type="email" id="role-email" class="role-auth-input" placeholder="E-posta">
-                    <input type="password" id="role-password" class="role-auth-input" placeholder="Şifre">
+                    <div class="role-auth-input-group">
+                        <input type="email" id="role-email" class="role-auth-input" placeholder="E-posta adresinizi girin">
+                    </div>
+                    <div class="role-auth-input-group">
+                        <input type="password" id="role-password" class="role-auth-input" placeholder="Şifrenizi girin">
+                    </div>
                     <div id="role-auth-error" class="form-error"></div>
                     <div class="role-auth-buttons">
-                        <button class="role-auth-btn role-auth-secondary" onclick="showRoleSelectionOnly()">Geri Dön</button>
-                        <button class="role-auth-btn role-auth-primary" onclick="roleLogin()">Giriş Yap</button>
-                        <button class="role-auth-btn role-auth-primary" onclick="roleSignup()">Kayıt Ol</button>
+                        <button class="role-auth-btn role-auth-secondary" onclick="showRoleSelectionOnly()">
+                            <i class="fas fa-arrow-left"></i> Geri Dön
+                        </button>
+                        <button class="role-auth-btn role-auth-primary" onclick="roleLogin()">
+                            <i class="fas fa-sign-in-alt"></i> Giriş Yap
+                        </button>
+                        <button class="role-auth-btn role-auth-primary" onclick="roleSignup()">
+                            <i class="fas fa-user-plus"></i> Kayıt Ol
+                        </button>
                     </div>
                 </div>
             </div>
             
             <button class="role-continue" id="continue-btn" onclick="showRoleAuth()" disabled>
-                Devam Et
+                <i class="fas fa-arrow-right"></i> Devam Et
             </button>
         </div>
 
         <!-- Öğrenci Paneli -->
         <div id="student-panel" style="display: none;">
             <header>
-                <h1>DERS TAKİP UYGULAMASI</h1>
+                <h1>I'KOCH</h1>
                 <div class="date-display" id="current-date">28 Ağustos 2023 Pazartesi</div>
                 <div id="student-fullname-row" class="user-fullname-row">
                     <span id="student-fullname" class="user-fullname-name"></span>
@@ -1075,7 +1358,7 @@
         <!-- Öğretmen Paneli -->
         <div id="teacher-panel" class="teacher-dashboard" style="display: none;">
             <header>
-                <h1>ÖĞRETMEN PANELİ</h1>
+                <h1>I'KOCH - ÖĞRETMEN PANELİ</h1>
                 <div class="date-display" id="teacher-date">28 Ağustos 2023 Pazartesi</div>
                 <div id="teacher-fullname-row" class="user-fullname-row">
                     <span id="teacher-fullname" class="user-fullname-name"></span>
@@ -1110,62 +1393,19 @@
                 <div id="classes-container"></div>
             </div>
             
-            <div id="student-detail" class="student-detail" style="display: none;">
-                <div class="detail-header">
-                    <h3 id="detail-student-name">Öğrenci Detayları</h3>
-                    <button class="auth-btn" onclick="hideStudentDetail()">
-                        <i class="fas fa-times"></i> Kapat
-                    </button>
-                </div>
-                
-                <div class="performance-chart" id="performance-chart">
-                    <!-- Grafik çubukları JavaScript ile eklenecek -->
-                </div>
-                
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-label">Türkçe</div>
-                        <div class="stat-value" id="det-turkce">0</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-label">Matematik</div>
-                        <div class="stat-value" id="det-matematik">0</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-label">Fen Bilimleri</div>
-                        <div class="stat-value" id="det-fen">0</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-label">İnkılap Tarihi</div>
-                        <div class="stat-value" id="det-inkilap">0</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-label">Din Kültürü</div>
-                        <div class="stat-value" id="det-din">0</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-label">İngilizce</div>
-                        <div class="stat-value" id="det-ingilizce">0</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-label">Toplam Soru</div>
-                        <div class="stat-value" id="det-total">0</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-label">Okunan Sayfa</div>
-                        <div class="stat-value" id="det-sayfa">0</div>
-                    </div>
-                </div>
-                
-                <div class="student-details-panel">
-                    <h4>Öğrenci Performans Geçmişi</h4>
-                    <div id="student-history">
-                        <div class="loading">
-                            <i class="fas fa-spinner"></i> Geçmiş veriler yükleniyor...
-                        </div>
+            <!-- Sınıf Öğrencileri Bölümü -->
+            <div class="student-list" style="margin-top: 25px;">
+                <h2><i class="fas fa-users"></i> Sınıf Öğrencileri</h2>
+                <div id="class-students-container">
+                    <div class="empty-state">
+                        <i class="fas fa-hand-pointer"></i>
+                        <p>Öğrenci verilerini görüntülemek için bir sınıfa tıklayın</p>
                     </div>
                 </div>
             </div>
+            
+            <!-- Dinamik öğrenci detayları buraya eklenecek -->
+            <div id="dynamic-student-details"></div>
         </div>
     </div>
     
@@ -1269,6 +1509,7 @@
 
     <div class="motivation">
         <p>"Başarı, küçük çabaların sürekliliğinden doğar." - Robert Collier</p>
+        <p style="margin-top: 10px; font-size: 0.9rem; opacity: 0.8;">I'Koch ile hedeflerinize ulaşın</p>
     </div>
 
     <script>
@@ -1333,10 +1574,12 @@
                     // İlk girişte öğretmen profilini doğrula (ad/soyad)
                     ensureStudentProfile(user.uid, 'teacher');
                 } else {
-                    // Rol atanmamışsa çıkış yap
-                    auth.signOut();
-                    showRoleSelection();
+                    // Rol atanmamışsa uyarı ver ve çıkış yap
                     showToast('Kullanıcı rolü bulunamadı. Lütfen tekrar giriş yapın.', 'error');
+                    setTimeout(() => {
+                        auth.signOut();
+                        showRoleSelection();
+                    }, 2000);
                 }
             } else {
                 // Kullanıcı giriş yapmamış
@@ -1410,6 +1653,13 @@
             document.querySelectorAll('.role-option').forEach(opt => opt.classList.remove('selected'));
             event.currentTarget.classList.add('selected');
             document.getElementById('continue-btn').disabled = false;
+            
+            // Seçim animasyonu
+            const continueBtn = document.getElementById('continue-btn');
+            continueBtn.style.transform = 'scale(1.05)';
+            setTimeout(() => {
+                continueBtn.style.transform = 'scale(1)';
+            }, 200);
         }
         
         function showRoleAuth() {
@@ -1423,6 +1673,17 @@
             // Başlığı güncelle
             const roleTitle = selectedRole === 'student' ? 'Öğrenci' : 'Öğretmen';
             document.getElementById('role-auth-title').textContent = `${roleTitle} Girişi`;
+            
+            // Form animasyonu
+            const authContainer = document.getElementById('role-auth-container');
+            authContainer.style.opacity = '0';
+            authContainer.style.transform = 'translateY(20px)';
+            
+            setTimeout(() => {
+                authContainer.style.transition = 'all 0.5s ease-out';
+                authContainer.style.opacity = '1';
+                authContainer.style.transform = 'translateY(0)';
+            }, 100);
         }
         
         function showRoleSelectionOnly() {
@@ -1435,6 +1696,11 @@
             document.getElementById('role-email').value = '';
             document.getElementById('role-password').value = '';
             clearError('role-auth-error');
+            
+            // Rol seçimini sıfırla
+            selectedRole = null;
+            document.getElementById('continue-btn').disabled = true;
+            document.querySelectorAll('.role-option').forEach(opt => opt.classList.remove('selected'));
         }
         
         function showRoleSelection() {
@@ -1455,10 +1721,10 @@
             if (auth.currentUser) {
                 auth.signOut().then(() => {
                     resetUIToRoleSelection();
-                showToast('Çıkış yapıldı.', 'info');
-            }).catch((error) => {
-                showToast('Çıkış hatası: ' + (error?.message || ''), 'error');
-            });
+                    showToast('Çıkış yapıldı.', 'info');
+                }).catch((error) => {
+                    showToast('Çıkış hatası: ' + (error?.message || ''), 'error');
+                });
             } else {
                 resetUIToRoleSelection();
             }
@@ -1503,9 +1769,17 @@
                         showTeacherPanel();
                     }
                 } else {
-                    // Rol uyuşmazlığı varsa çıkış yap
-                    auth.signOut();
-                    showError('role-auth-error', 'Bu hesap ile seçtiğiniz role erişim izniniz yok.');
+                    // Rol uyuşmazlığı varsa uyarı ver ve çıkış yap
+                    const actualRole = role === 'student' ? 'Öğrenci' : role === 'teacher' ? 'Öğretmen' : 'Bilinmeyen';
+                    const selectedRoleText = selectedRole === 'student' ? 'Öğrenci' : 'Öğretmen';
+                    
+                    showError('role-auth-error', `Bu hesap ${actualRole} hesabıdır. ${selectedRoleText} hesabı ile giriş yapmalısınız.`);
+                    showToast(`Hesap türü uyuşmazlığı: Bu hesap ${actualRole} hesabıdır.`, 'warning');
+                    
+                    // Kısa bir süre sonra çıkış yap
+                    setTimeout(() => {
+                        auth.signOut();
+                    }, 3000);
                 }
             } catch (error) {
                 const message = getAuthErrorMessage(error.code, 'login');
@@ -1553,7 +1827,9 @@
                     ensureStudentProfile(user.uid, 'teacher');
                 }
             } catch (error) {
-                showError('role-auth-error', getAuthErrorMessage(error.code, 'signup'));
+                const message = getAuthErrorMessage(error.code, 'signup');
+                showError('role-auth-error', message);
+                showToast('Kayıt hatası: ' + message, 'error');
             }
         }
         
@@ -1845,7 +2121,7 @@
                 });
         }
 
-        // Öğrenci: Hatırlatmalarım sekmesi veri yükleme
+        // Öğrenci: Hatırlatmalarım sekmesi veri yükleme (Optimize edilmiş)
         async function loadStudentReminders() {
             const user = auth.currentUser;
             if (!user) {
@@ -1854,51 +2130,92 @@
                 `;
                 return;
             }
+            
+            // Loading göster
             document.getElementById('student-reminders-list').innerHTML = `
-                <div class="loading"><i class="fas fa-spinner"></i> Yükleniyor...</div>
+                <div class="loading"><i class="fas fa-spinner"></i> Hatırlatmalar yükleniyor...</div>
             `;
+            
             try {
-                // Üye olduğu sınıfları topla
+                // 1. Üye olduğu sınıfları paralel olarak al
                 const classesSnap = await db.collection('classes').where('memberIds', 'array-contains', user.uid).get();
                 if (classesSnap.empty) {
                     document.getElementById('student-reminders-list').innerHTML = `
-                        <div class="empty-state"><i class="fas fa-bell-slash"></i> Hatırlatma yok</div>
+                        <div class="empty-state"><i class="fas fa-bell-slash"></i> Henüz bir sınıfa katılmamışsınız</div>
                     `;
                     return;
                 }
-                let reminders = [];
-                for (const c of classesSnap.docs) {
+                
+                // 2. Tüm hatırlatmaları paralel olarak al (performans optimizasyonu)
+                const reminderPromises = classesSnap.docs.map(async (c) => {
                     const classId = c.id;
-                    const rs = await db.collection('classes').doc(classId).collection('reminders')
-                        .orderBy('createdAt', 'desc').limit(20).get();
-                    rs.forEach(r => reminders.push({ id: r.id, classId, ...r.data() }));
-                }
+                    try {
+                        const rs = await db.collection('classes').doc(classId).collection('reminders')
+                            .orderBy('createdAt', 'desc').limit(10).get(); // Limit azaltıldı
+                        return rs.docs.map(r => ({ id: r.id, classId, ...r.data() }));
+                    } catch (error) {
+                        console.warn(`Hatırlatma yükleme hatası (sınıf ${classId}):`, error);
+                        return [];
+                    }
+                });
+                
+                const reminderArrays = await Promise.all(reminderPromises);
+                let reminders = reminderArrays.flat();
+                
                 if (!reminders.length) {
                     document.getElementById('student-reminders-list').innerHTML = `
-                        <div class="empty-state"><i class="fas fa-bell-slash"></i> Hatırlatma yok</div>
+                        <div class="empty-state"><i class="fas fa-bell-slash"></i> Henüz hatırlatma yok</div>
                     `;
                     return;
                 }
-                // Tarihe göre sırala
+                
+                // 3. Tarihe göre sırala ve en son 15 tanesini al
                 reminders.sort((a,b) => ((b.createdAt?.toMillis?.()||0) - (a.createdAt?.toMillis?.()||0)));
-                let html = '';
-                for (const r of reminders) {
-                    // Gönderen adı
-                    let sender = r.senderName || '';
-                    try {
-                        if (!sender && r.ownerId) {
-                            const sDoc = await db.collection('students').doc(r.ownerId).get();
+                reminders = reminders.slice(0, 15); // Performans için limit
+                
+                // 4. Gönderen bilgilerini toplu olarak al (cache optimizasyonu)
+                const ownerIds = [...new Set(reminders.map(r => r.ownerId).filter(Boolean))];
+                const senderCache = new Map();
+                
+                if (ownerIds.length > 0) {
+                    const senderPromises = ownerIds.map(async (ownerId) => {
+                        try {
+                            // Önce students koleksiyonunu dene
+                            const sDoc = await db.collection('students').doc(ownerId).get();
                             if (sDoc.exists) {
                                 const sd = sDoc.data();
-                                sender = sd.fullName || ((sd.firstName && sd.lastName) ? `${sd.firstName} ${sd.lastName}` : sender);
+                                const fullName = sd.fullName || ((sd.firstName && sd.lastName) ? `${sd.firstName} ${sd.lastName}` : '');
+                                return [ownerId, fullName || 'Bilinmeyen'];
                             } else {
-                                const uDoc = await db.collection('users').doc(r.ownerId).get();
-                                if (uDoc.exists) sender = uDoc.data().email || sender;
+                                // Sonra users koleksiyonunu dene
+                                const uDoc = await db.collection('users').doc(ownerId).get();
+                                if (uDoc.exists) {
+                                    return [ownerId, uDoc.data().email || 'Bilinmeyen'];
+                                }
                             }
+                        } catch (error) {
+                            console.warn(`Gönderen bilgisi alınamadı (${ownerId}):`, error);
                         }
-                    } catch {}
+                        return [ownerId, 'Bilinmeyen'];
+                    });
+                    
+                    const senderResults = await Promise.all(senderPromises);
+                    senderResults.forEach(([id, name]) => senderCache.set(id, name));
+                }
+                
+                // 5. HTML oluştur
+                let html = '';
+                for (const r of reminders) {
+                    const sender = r.senderName || senderCache.get(r.ownerId) || 'Bilinmeyen';
                     const dt = r.createdAt?.toDate ? r.createdAt.toDate() : null;
-                    const dateStr = dt ? dt.toLocaleString('tr-TR') : '';
+                    const dateStr = dt ? dt.toLocaleString('tr-TR', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    }) : '';
+                    
                     html += `
                         <div class="reminder-card">
                             <div class="reminder-header">
@@ -1909,11 +2226,13 @@
                         </div>
                     `;
                 }
+                
                 document.getElementById('student-reminders-list').innerHTML = html;
+                
             } catch (e) {
                 console.error('loadStudentReminders error', e);
                 document.getElementById('student-reminders-list').innerHTML = `
-                    <div class="empty-state"><i class="fas fa-exclamation-triangle"></i> Yüklenemedi</div>
+                    <div class="empty-state"><i class="fas fa-exclamation-triangle"></i> Hatırlatmalar yüklenemedi</div>
                 `;
             }
         }
@@ -1998,10 +2317,195 @@
             }
         }
         
-        async function showStudentDetail(studentId) {
-            // Öğrenci detaylarını göster
-            document.getElementById('student-detail').style.display = 'block';
+        // Sınıf öğrencilerinin verilerini yükleme fonksiyonu
+        async function loadClassStudentsData(classId) {
+            const user = auth.currentUser;
+            if (!user) return;
             
+            console.log('Öğrenci verileri yükleniyor... Sınıf ID:', classId);
+            
+            document.getElementById('class-students-container').innerHTML = `
+                <div class="loading">
+                    <i class="fas fa-spinner"></i> Sınıf öğrencileri yükleniyor...
+                </div>
+            `;
+            
+            try {
+                // Sınıf bilgilerini al
+                const classDoc = await db.collection('classes').doc(classId).get();
+                
+                console.log('Sınıf dokümanı bulundu:', classDoc.exists);
+                if (!classDoc.exists) {
+                    document.getElementById('class-students-container').innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <p>Sınıf bulunamadı</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                const classData = classDoc.data();
+                const memberIds = classData.memberIds || [];
+                
+                console.log('Sınıf verileri:', classData);
+                console.log('Üye ID\'leri:', memberIds);
+                console.log('Üye sayısı:', memberIds.length);
+                
+                if (memberIds.length === 0) {
+                    document.getElementById('class-students-container').innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-user-graduate"></i>
+                            <p>Bu sınıfta henüz öğrenci bulunmamaktadır</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // Öğrenci verilerini paralel olarak al
+                const studentPromises = memberIds.map(async (studentId) => {
+                    console.log('Öğrenci verisi alınıyor:', studentId);
+                    try {
+                        // Öğrenci bilgilerini al
+                        const studentDoc = await db.collection('users').doc(studentId).get();
+                        if (!studentDoc.exists) {
+                            return null;
+                        }
+                        
+                        const student = studentDoc.data();
+                    
+                    // Öğrenci adını al
+                    let studentName = student.email;
+                    try {
+                        const studentProfileDoc = await db.collection('students').doc(studentId).get();
+                        if (studentProfileDoc.exists) {
+                            const sd = studentProfileDoc.data();
+                            studentName = sd.fullName || ((sd.firstName && sd.lastName) ? `${sd.firstName} ${sd.lastName}` : student.email);
+                        }
+                    } catch (error) {
+                        console.warn(`Öğrenci adı alınamadı (${studentId}):`, error);
+                    }
+                    
+                    // Öğrenci istatistiklerini getir
+                    let stats = { total: 0, sayfa: 0, turkce: 0, matematik: 0, fen: 0, inkilap: 0, din: 0, ingilizce: 0 };
+                    try {
+                        const statsDoc = await db.collection('userStats').doc(studentId).get();
+                        if (statsDoc.exists) {
+                            stats = { ...stats, ...statsDoc.data() };
+                        }
+                    } catch (error) {
+                        console.warn(`Öğrenci istatistikleri alınamadı (${studentId}):`, error);
+                    }
+                    
+                    return {
+                        id: studentId,
+                        name: studentName,
+                        email: student.email,
+                        stats: stats
+                    };
+                } catch (error) {
+                    console.warn(`Öğrenci verisi alınamadı (${studentId}):`, error);
+                    return null;
+                }
+            });
+                
+                const students = (await Promise.all(studentPromises)).filter(s => s !== null);
+                
+                console.log('Başarıyla alınan öğrenci sayısı:', students.length);
+                console.log('Öğrenci verileri:', students);
+                
+                if (students.length === 0) {
+                    document.getElementById('class-students-container').innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-user-graduate"></i>
+                            <p>Bu sınıfta aktif öğrenci bulunamadı</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // İstatistiklere göre sırala (en çok soru çözenler üstte)
+                students.sort((a, b) => b.stats.total - a.stats.total);
+                
+                let html = `
+                    <div class="stats-overview" style="margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 10px;">
+                        <h3 style="margin-bottom: 10px; color: #4e54c8;">${classData.name} Sınıfı İstatistikleri</h3>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px;">
+                            <div style="text-align: center;">
+                                <div style="font-size: 1.5rem; font-weight: bold; color: #4e54c8;">${students.length}</div>
+                                <div style="font-size: 0.9rem; color: #6c757d;">Sınıf Öğrencisi</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="font-size: 1.5rem; font-weight: bold; color: #4e54c8;">${students.reduce((sum, s) => sum + s.stats.total, 0)}</div>
+                                <div style="font-size: 0.9rem; color: #6c757d;">Toplam Soru</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="font-size: 1.5rem; font-weight: bold; color: #4e54c8;">${students.reduce((sum, s) => sum + s.stats.sayfa, 0)}</div>
+                                <div style="font-size: 0.9rem; color: #6c757d;">Toplam Sayfa</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="font-size: 1.5rem; font-weight: bold; color: #4e54c8;">${Math.round(students.reduce((sum, s) => sum + s.stats.total, 0) / students.length)}</div>
+                                <div style="font-size: 0.9rem; color: #6c757d;">Ortalama Soru</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                // Öğrenci listesi
+                students.forEach((student, index) => {
+                    const rank = index + 1;
+                    const rankIcon = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : `#${rank}`;
+                    
+                    html += `
+                        <div class="student-item" onclick="showStudentDetail('${student.id}')" style="position: relative; cursor: pointer;">
+                            <div style="position: absolute; top: 10px; right: 10px; font-size: 1.2rem; font-weight: bold; color: #4e54c8;">
+                                ${rankIcon}
+                            </div>
+                            <div class="student-name" style="font-size: 1.1rem; margin-bottom: 8px;">${student.name}</div>
+                            <div style="color: #6c757d; font-size: 0.9rem; margin-bottom: 8px;">${student.email}</div>
+                            <div class="student-stats" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); gap: 10px; margin-top: 10px;">
+                                <div style="text-align: center; padding: 8px; background: #e9ecef; border-radius: 6px;">
+                                    <div style="font-weight: bold; color: #4e54c8;">${student.stats.total}</div>
+                                    <div style="font-size: 0.8rem;">Soru</div>
+                                </div>
+                                <div style="text-align: center; padding: 8px; background: #e9ecef; border-radius: 6px;">
+                                    <div style="font-weight: bold; color: #4e54c8;">${student.stats.sayfa}</div>
+                                    <div style="font-size: 0.8rem;">Sayfa</div>
+                                </div>
+                                <div style="text-align: center; padding: 8px; background: #e9ecef; border-radius: 6px;">
+                                    <div style="font-weight: bold; color: #4e54c8;">${student.stats.turkce}</div>
+                                    <div style="font-size: 0.8rem;">Türkçe</div>
+                                </div>
+                                <div style="text-align: center; padding: 8px; background: #e9ecef; border-radius: 6px;">
+                                    <div style="font-weight: bold; color: #4e54c8;">${student.stats.matematik}</div>
+                                    <div style="font-size: 0.8rem;">Matematik</div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                document.getElementById('class-students-container').innerHTML = html;
+                
+            } catch (error) {
+                console.error("Sınıf öğrenci verileri yüklenirken hata:", error);
+                console.error('Hata detayları:', {
+                    code: error.code,
+                    message: error.message,
+                    stack: error.stack
+                });
+                document.getElementById('class-students-container').innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <p>Sınıf öğrenci verileri yüklenirken hata oluştu</p>
+                        <p style="font-size: 0.8rem; color: #666;">Hata: ${error.message || 'Bilinmeyen hata'}</p>
+                    </div>
+                `;
+            }
+        }
+        
+        async function showStudentDetail(studentId) {
+            console.log('Öğrenci detayı gösteriliyor:', studentId);
             try {
                 // Öğrenci bilgilerini getir
                 const studentDoc = await db.collection('users').doc(studentId).get();
@@ -2011,70 +2515,168 @@
                 }
                 
                 const student = studentDoc.data();
-                const studentName = student.name || student.email;
                 
-                document.getElementById('detail-student-name').textContent = `${studentName} - Detaylı İstatistikler`;
+                // Öğrenci adını al
+                let studentName = student.email;
+                try {
+                    const studentProfileDoc = await db.collection('students').doc(studentId).get();
+                    if (studentProfileDoc.exists) {
+                        const sd = studentProfileDoc.data();
+                        studentName = sd.fullName || ((sd.firstName && sd.lastName) ? `${sd.firstName} ${sd.lastName}` : student.email);
+                    }
+                } catch (error) {
+                    console.warn(`Öğrenci adı alınamadı (${studentId}):`, error);
+                }
                 
                 // Öğrenci istatistiklerini getir
-                const statsDoc = await db.collection('userStats').doc(studentId).get();
-                if (statsDoc.exists) {
-                    const stats = statsDoc.data();
-                    
-                    document.getElementById('det-turkce').textContent = stats.turkce || 0;
-                    document.getElementById('det-matematik').textContent = stats.matematik || 0;
-                    document.getElementById('det-fen').textContent = stats.fen || 0;
-                    document.getElementById('det-inkilap').textContent = stats.inkilap || 0;
-                    document.getElementById('det-din').textContent = stats.din || 0;
-                    document.getElementById('det-ingilizce').textContent = stats.ingilizce || 0;
-                    document.getElementById('det-total').textContent = stats.total || 0;
-                    document.getElementById('det-sayfa').textContent = stats.sayfa || 0;
-                    
-                    // Performans grafiğini oluştur
-                    createPerformanceChart(stats);
-                } else {
-                    // İstatistikler yoksa sıfırları göster
-                    document.getElementById('det-turkce').textContent = 0;
-                    document.getElementById('det-matematik').textContent = 0;
-                    document.getElementById('det-fen').textContent = 0;
-                    document.getElementById('det-inkilap').textContent = 0;
-                    document.getElementById('det-din').textContent = 0;
-                    document.getElementById('det-ingilizce').textContent = 0;
-                    document.getElementById('det-total').textContent = 0;
-                    document.getElementById('det-sayfa').textContent = 0;
-                    
-                    // Boş grafik oluştur
-                    createPerformanceChart({});
+                let stats = { turkce: 0, matematik: 0, fen: 0, inkilap: 0, din: 0, ingilizce: 0, total: 0, sayfa: 0 };
+                try {
+                    const statsDoc = await db.collection('userStats').doc(studentId).get();
+                    if (statsDoc.exists) {
+                        stats = { ...stats, ...statsDoc.data() };
+                    }
+                } catch (error) {
+                    console.warn(`Öğrenci istatistikleri alınamadı (${studentId}):`, error);
                 }
                 
                 // Öğrenci geçmiş verilerini getir
-                const historySnapshot = await db.collection('users').doc(studentId)
-                    .collection('days')
-                    .orderBy('timestamp', 'desc')
-                    .limit(7)
-                    .get();
-                
                 let historyHTML = '';
-                if (historySnapshot.empty) {
-                    historyHTML = '<p>Henüz kayıtlı veri bulunmamaktadır</p>';
-                } else {
-                    historyHTML = '<div class="history-list">';
-                    historySnapshot.forEach(doc => {
-                        const data = doc.data();
-                        historyHTML += `
-                            <div class="history-item">
-                                <div class="history-date">${data.date}</div>
-                                <div class="history-stats">${data.total || 0} soru, ${data.sayfa || 0} sayfa</div>
-                            </div>
-                        `;
-                    });
-                    historyHTML += '</div>';
+                try {
+                    const historySnapshot = await db.collection('users').doc(studentId)
+                        .collection('days')
+                        .orderBy('timestamp', 'desc')
+                        .limit(7)
+                        .get();
+                    
+                    if (historySnapshot.empty) {
+                        historyHTML = '<p style="text-align: center; color: #6c757d; padding: 20px;">Henüz kayıtlı veri bulunmamaktadır</p>';
+                    } else {
+                        historyHTML = '<div class="history-list">';
+                        historySnapshot.forEach(doc => {
+                            const data = doc.data();
+                            historyHTML += `
+                                <div class="history-item">
+                                    <div class="history-date">${data.date}</div>
+                                    <div class="history-stats">${data.total || 0} soru, ${data.sayfa || 0} sayfa</div>
+                                </div>
+                            `;
+                        });
+                        historyHTML += '</div>';
+                    }
+                } catch (error) {
+                    console.warn(`Öğrenci geçmişi alınamadı (${studentId}):`, error);
+                    historyHTML = '<p style="text-align: center; color: #6c757d; padding: 20px;">Geçmiş veriler yüklenemedi</p>';
                 }
                 
-                document.getElementById('student-history').innerHTML = historyHTML;
+                // Performans grafiği HTML'i oluştur
+                const subjects = [
+                    { id: 'turkce', label: 'Türkçe', value: stats.turkce || 0 },
+                    { id: 'matematik', label: 'Matematik', value: stats.matematik || 0 },
+                    { id: 'fen', label: 'Fen', value: stats.fen || 0 },
+                    { id: 'inkilap', label: 'İnkılap', value: stats.inkilap || 0 },
+                    { id: 'din', label: 'Din', value: stats.din || 0 },
+                    { id: 'ingilizce', label: 'İngilizce', value: stats.ingilizce || 0 }
+                ];
+                
+                const maxValue = Math.max(...subjects.map(s => s.value), 10);
+                let chartHTML = '<div class="performance-chart" style="height: 200px; background: #e9ecef; border-radius: 10px; margin: 15px 0; display: flex; align-items: flex-end; justify-content: space-around; padding: 10px;">';
+                subjects.forEach(subject => {
+                    const barHeight = subject.value > 0 ? (subject.value / maxValue) * 150 : 5;
+                    chartHTML += `
+                        <div style="width: 40px; background: #4e54c8; border-radius: 5px 5px 0 0; position: relative;">
+                            <div style="position: absolute; top: -20px; left: 0; right: 0; text-align: center; font-weight: bold;">${subject.value}</div>
+                            <div style="position: absolute; bottom: -25px; left: 0; right: 0; text-align: center; font-size: 0.8rem;">${subject.label}</div>
+                        </div>
+                    `;
+                });
+                chartHTML += '</div>';
+                
+                // Dinamik detay HTML'i oluştur
+                const detailHTML = `
+                    <div class="student-detail" style="margin-top: 20px; padding: 20px; background: #f8f9fa; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
+                        <div class="detail-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid #4e54c8;">
+                            <h3 style="color: #4e54c8; font-size: 1.3rem; margin: 0;">${studentName} - Detaylı İstatistikler</h3>
+                            <button class="auth-btn" onclick="hideStudentDetail('${studentId}')" style="background: #dc2626; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer;">
+                                <i class="fas fa-times"></i> Kapat
+                            </button>
+                        </div>
+                        
+                        ${chartHTML}
+                        
+                        <div class="stats-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; margin: 20px 0;">
+                            <div class="stat-card" style="background: white; padding: 15px; border-radius: 10px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                                <div style="font-size: 0.9rem; color: #6c757d; margin-bottom: 5px;">Türkçe</div>
+                                <div style="font-size: 1.5rem; font-weight: bold; color: #4e54c8;">${stats.turkce || 0}</div>
+                            </div>
+                            <div class="stat-card" style="background: white; padding: 15px; border-radius: 10px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                                <div style="font-size: 0.9rem; color: #6c757d; margin-bottom: 5px;">Matematik</div>
+                                <div style="font-size: 1.5rem; font-weight: bold; color: #4e54c8;">${stats.matematik || 0}</div>
+                            </div>
+                            <div class="stat-card" style="background: white; padding: 15px; border-radius: 10px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                                <div style="font-size: 0.9rem; color: #6c757d; margin-bottom: 5px;">Fen Bilimleri</div>
+                                <div style="font-size: 1.5rem; font-weight: bold; color: #4e54c8;">${stats.fen || 0}</div>
+                            </div>
+                            <div class="stat-card" style="background: white; padding: 15px; border-radius: 10px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                                <div style="font-size: 0.9rem; color: #6c757d; margin-bottom: 5px;">İnkılap Tarihi</div>
+                                <div style="font-size: 1.5rem; font-weight: bold; color: #4e54c8;">${stats.inkilap || 0}</div>
+                            </div>
+                            <div class="stat-card" style="background: white; padding: 15px; border-radius: 10px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                                <div style="font-size: 0.9rem; color: #6c757d; margin-bottom: 5px;">Din Kültürü</div>
+                                <div style="font-size: 1.5rem; font-weight: bold; color: #4e54c8;">${stats.din || 0}</div>
+                            </div>
+                            <div class="stat-card" style="background: white; padding: 15px; border-radius: 10px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                                <div style="font-size: 0.9rem; color: #6c757d; margin-bottom: 5px;">İngilizce</div>
+                                <div style="font-size: 1.5rem; font-weight: bold; color: #4e54c8;">${stats.ingilizce || 0}</div>
+                            </div>
+                            <div class="stat-card" style="background: white; padding: 15px; border-radius: 10px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                                <div style="font-size: 0.9rem; color: #6c757d; margin-bottom: 5px;">Toplam Soru</div>
+                                <div style="font-size: 1.5rem; font-weight: bold; color: #4e54c8;">${stats.total || 0}</div>
+                            </div>
+                            <div class="stat-card" style="background: white; padding: 15px; border-radius: 10px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                                <div style="font-size: 0.9rem; color: #6c757d; margin-bottom: 5px;">Okunan Sayfa</div>
+                                <div style="font-size: 1.5rem; font-weight: bold; color: #4e54c8;">${stats.sayfa || 0}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="student-details-panel" style="margin-top: 20px; padding: 15px; background: white; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                            <h4 style="color: #4e54c8; margin-bottom: 15px;">Öğrenci Performans Geçmişi</h4>
+                            <div id="student-history-${studentId}">
+                                ${historyHTML}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                // Mevcut detayları kaldır ve yenisini ekle
+                const existingDetail = document.querySelector(`[data-student-detail="${studentId}"]`);
+                if (existingDetail) {
+                    existingDetail.remove();
+                }
+                
+                // Yeni detayı öğrenci kartının hemen altına ekle
+                const studentCard = document.querySelector(`[onclick="showStudentDetail('${studentId}')"]`);
+                if (studentCard) {
+                    const detailDiv = document.createElement('div');
+                    detailDiv.innerHTML = detailHTML;
+                    detailDiv.setAttribute('data-student-detail', studentId);
+                    studentCard.parentNode.insertBefore(detailDiv, studentCard.nextSibling);
+                }
                 
             } catch (error) {
                 console.error("Öğrenci detayları yüklenirken hata oluştu:", error);
-                showToast('Öğrenci detayları yüklenirken hata oluştu', 'error');
+                console.error('Hata detayları:', {
+                    code: error.code,
+                    message: error.message,
+                    stack: error.stack
+                });
+                showToast('Öğrenci detayları yüklenirken hata oluştu: ' + (error.message || 'Bilinmeyen hata'), 'error');
+            }
+        }
+        
+        function hideStudentDetail(studentId) {
+            const detailElement = document.querySelector(`[data-student-detail="${studentId}"]`);
+            if (detailElement) {
+                detailElement.remove();
             }
         }
         
@@ -2107,9 +2709,7 @@
             });
         }
         
-        function hideStudentDetail() {
-            document.getElementById('student-detail').style.display = 'none';
-        }
+        // Bu fonksiyon artık yukarıda tanımlandı
         
         // Öğrenci Ad/Soyad Modal Akışı
         async function ensureStudentProfile(userId, role) {
@@ -2573,10 +3173,15 @@
         async function loadTeacherClasses() {
             const user = auth.currentUser;
             if (!user) return;
+            
+            console.log('Sınıflar yükleniyor... Kullanıcı ID:', user.uid);
+            
             try {
                 const snap = await db.collection('classes')
                     .where('ownerId', '==', user.uid)
                     .get();
+                
+                console.log('Sınıf sorgusu sonucu:', snap.size, 'sınıf bulundu');
                 if (snap.empty) {
                     document.getElementById('classes-container').innerHTML = `
                         <div class="empty-state">
@@ -2615,6 +3220,7 @@
                                     <button class="small-btn secondary" onclick="copyClassId('${id}')"><i class='fas fa-copy'></i> Kopyala</button>
                                     <button class="small-btn secondary" onclick="openMembersModal('${id}')"><i class='fas fa-users'></i> Üyeler</button>
                                     <button class="small-btn danger" onclick="deleteClass('${id}')"><i class='fas fa-trash'></i> Sil</button>
+                                    <button class="small-btn veriler-btn" onclick="loadClassStudentsData('${id}')"><i class='fas fa-chart-bar'></i> Öğrenci Verileri</button>
                                 </div>
                             </div>
                         `;
@@ -2624,10 +3230,16 @@
                 }
             } catch (e) {
                 console.error('loadTeacherClasses error', e);
+                console.error('Hata detayları:', {
+                    code: e.code,
+                    message: e.message,
+                    stack: e.stack
+                });
                 document.getElementById('classes-container').innerHTML = `
                     <div class="empty-state">
                         <i class="fas fa-exclamation-triangle"></i>
                         <p>Sınıflar yüklenirken hata oluştu: ${(e && e.message) ? e.message : ''}</p>
+                        <p style="font-size: 0.8rem; color: #666;">Hata kodu: ${e.code || 'Bilinmeyen'}</p>
                     </div>
                 `;
             }
