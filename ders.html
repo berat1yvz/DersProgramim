@@ -51,6 +51,21 @@
             margin: 10px 0;
             font-weight: 500;
         }
+
+        .user-fullname-row {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 6px;
+        }
+
+        .user-fullname-name {
+            background: rgba(255,255,255,0.15);
+            padding: 6px 10px;
+            border-radius: 12px;
+            font-weight: 600;
+        }
         
         .auth-container {
             padding: 15px;
@@ -335,6 +350,8 @@
             justify-content: center;
             align-items: center;
             z-index: 1000;
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
         }
         
         .modal-content {
@@ -488,7 +505,7 @@
             border-radius: 20px;
             padding: 8px 15px;
             font-size: 0.85rem;
-            cursor: pointer;
+            cursor: default;
             transition: all 0.3s;
         }
         
@@ -843,9 +860,13 @@
             <header>
                 <h1>DERS TAKİP UYGULAMASI</h1>
                 <div class="date-display" id="current-date">28 Ağustos 2023 Pazartesi</div>
+                <div id="student-fullname-row" class="user-fullname-row">
+                    <span id="student-fullname" class="user-fullname-name"></span>
+                    <button class="auth-btn" onclick="logoutAndRedirect()">Çıkış Yap</button>
+                </div>
             </header>
             
-            <div class="role-switch" id="role-switch" onclick="showRoleSelection()">
+            <div class="role-switch" id="role-switch">
                 <i class="fas fa-user-graduate"></i> Öğrenci
             </div>
             
@@ -936,18 +957,17 @@
             <header>
                 <h1>ÖĞRETMEN PANELİ</h1>
                 <div class="date-display" id="teacher-date">28 Ağustos 2023 Pazartesi</div>
+                <div id="teacher-fullname-row" class="user-fullname-row">
+                    <span id="teacher-fullname" class="user-fullname-name"></span>
+                    <button class="auth-btn" onclick="logoutAndRedirect()">Çıkış Yap</button>
+                </div>
             </header>
             
-            <div class="role-switch" onclick="showRoleSelection()">
+            <div class="role-switch">
                 <i class="fas fa-chalkboard-teacher"></i> Öğretmen
             </div>
             
-            <div class="user-info">
-                <span class="user-email" id="teacher-email">ogretmen@example.com</span>
-                <button class="auth-btn" onclick="logout()">
-                    <i class="fas fa-sign-out-alt"></i> Çıkış
-                </button>
-            </div>
+            
             
             <div class="date-filter">
                 <span>Tarih Aralığı:</span>
@@ -968,6 +988,9 @@
                 </button>
                 <button class="teacher-action-btn" onclick="showStatistics()">
                     <i class="fas fa-chart-bar"></i> İstatistikleri Görüntüle
+                </button>
+                <button class="teacher-action-btn" onclick="openCreateClassModal()">
+                    <i class="fas fa-plus"></i> Sınıf Oluştur
                 </button>
             </div>
             
@@ -991,6 +1014,17 @@
                 <div id="students-container">
                     <div class="loading">
                         <i class="fas fa-spinner"></i> Öğrenci listesi yükleniyor...
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sınıflar Bölümü -->
+            <div class="student-list" style="margin-top: 25px;">
+                <h2><i class="fas fa-school"></i> Sınıflarım</h2>
+                <div id="classes-container">
+                    <div class="empty-state">
+                        <i class="fas fa-school"></i>
+                        <p>Henüz sınıf oluşturmadınız</p>
                     </div>
                 </div>
             </div>
@@ -1057,6 +1091,48 @@
     <!-- Toast Container -->
     <div id="toast-container" class="toast-container"></div>
 
+    <!-- İlk Girişte Öğrenci Ad/Soyad Modalı -->
+    <div id="student-name-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h3 id="student-name-modal-title">Öğrenci Bilgileri</h3>
+            <p>Lütfen ad ve soyad bilgilerinizi girin.</p>
+            <input type="text" id="student-first-name" class="modal-input" placeholder="Ad">
+            <input type="text" id="student-last-name" class="modal-input" placeholder="Soyad">
+            <div id="student-name-form-error" class="form-error"></div>
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-secondary" onclick="closeStudentNameModal()">İptal</button>
+                <button class="modal-btn modal-btn-primary" onclick="saveStudentName()">Kaydet</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sınıf Oluşturma Modalı -->
+    <div id="create-class-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h3>Sınıf Oluştur</h3>
+            <input type="text" id="class-name-input" class="modal-input" placeholder="Sınıf adı (örn: 8A)">
+            <div id="create-class-error" class="form-error"></div>
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-secondary" onclick="closeCreateClassModal()">İptal</button>
+                <button class="modal-btn modal-btn-primary" onclick="createClass()">Oluştur</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sınıfa Öğrenci Ekleme Modalı -->
+    <div id="add-student-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h3>Öğrenci Ekle</h3>
+            <p>Öğrencinin kayıtlı e-posta adresini girin.</p>
+            <input type="email" id="add-student-email" class="modal-input" placeholder="ogrenci@example.com">
+            <div id="add-student-error" class="form-error"></div>
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-secondary" onclick="closeAddStudentModal()">İptal</button>
+                <button class="modal-btn modal-btn-primary" onclick="confirmAddStudentToClass()">Ekle</button>
+            </div>
+        </div>
+    </div>
+
     <div class="motivation">
         <p>"Başarı, küçük çabaların sürekliliğinden doğar." - Robert Collier</p>
     </div>
@@ -1087,9 +1163,11 @@
             currentUser = user;
             if (user) {
                 // Kullanıcı giriş yapmış
-                document.getElementById('user-container').style.display = 'flex';
+                const userContainer = document.getElementById('user-container');
+                if (userContainer) userContainer.style.display = 'flex';
                 document.getElementById('user-email').textContent = user.email;
-                document.getElementById('teacher-email').textContent = user.email;
+                const teacherEmailEl = document.getElementById('teacher-email');
+                if (teacherEmailEl) teacherEmailEl.textContent = user.email;
                 
                 // Kullanıcı rolünü kontrol et
                 const role = await checkUserRole(user.uid);
@@ -1097,6 +1175,8 @@
                 if (role === 'student') {
                     // Öğrenci panelini göster
                     showStudentPanel();
+                    // Ad soyad bilgisini başlık altında göster
+                    await updateStudentFullNameDisplay(user);
                     // Bugünün verilerini yükle
                     loadTodaysData();
                     
@@ -1104,11 +1184,18 @@
                     if (document.getElementById('history-tab').classList.contains('active')) {
                         loadHistory();
                     }
+
+                    // İlk girişte öğrenci profilini doğrula (ad/soyad)
+                    ensureStudentProfile(user.uid, 'student');
                 } else if (role === 'teacher') {
                     // Öğretmen panelini göster
                     showTeacherPanel();
                     // Öğretmen paneline öğrenci listesini yükle
                     loadStudentsList();
+                    // Ad soyad bilgisini başlık altında göster
+                    await updateTeacherFullNameDisplay(user);
+                    // İlk girişte öğretmen profilini doğrula (ad/soyad)
+                    ensureStudentProfile(user.uid, 'teacher');
                 } else {
                     // Rol atanmamışsa çıkış yap
                     auth.signOut();
@@ -1117,8 +1204,14 @@
                 }
             } else {
                 // Kullanıcı giriş yapmamış
-                document.getElementById('user-container').style.display = 'none';
+                const userContainer = document.getElementById('user-container');
+                if (userContainer) userContainer.style.display = 'none';
                 showRoleSelection();
+                // Ad soyad satırını gizle
+                const row = document.getElementById('student-fullname-row');
+                if (row) row.style.display = 'none';
+                const trow = document.getElementById('teacher-fullname-row');
+                if (trow) trow.style.display = 'none';
             }
         });
         
@@ -1315,8 +1408,12 @@
                 // Kayıt başarılıysa ilgili panelyi göster
                 if (selectedRole === 'student') {
                     showStudentPanel();
+                    // İlk kayıt sonrası öğrenci profilini iste
+                    ensureStudentProfile(user.uid, 'student');
                 } else if (selectedRole === 'teacher') {
                     showTeacherPanel();
+                    // İlk kayıt sonrası öğretmen profilini iste
+                    ensureStudentProfile(user.uid, 'teacher');
                 }
             } catch (error) {
                 showError('role-auth-error', getAuthErrorMessage(error.code, 'signup'));
@@ -1340,6 +1437,8 @@
             
             // Öğretmen paneline öğrenci listesini yükle
             loadStudentsList();
+            // Sınıfları yükle
+            loadTeacherClasses();
         }
         
         function showError(id, message) {
@@ -1396,6 +1495,18 @@
         // Çıkış yapma fonksiyonu
         function logout() {
             auth.signOut().then(() => {
+                showRoleSelection();
+            }).catch((error) => {
+                showToast('Çıkış hatası: ' + (error?.message || ''), 'error');
+            });
+        }
+
+        // Güvenli çıkış + yönlendirme
+        function logoutAndRedirect() {
+            // Not: Giriş sayfanız farklıysa aşağıdaki URL'yi değiştirin.
+            auth.signOut().then(() => {
+                // Örnek yönlendirme: giriş sayfasına dön
+                // window.location.href = 'giris_sayfasi.html';
                 showRoleSelection();
             }).catch((error) => {
                 showToast('Çıkış hatası: ' + (error?.message || ''), 'error');
@@ -1782,6 +1893,128 @@
         function hideStudentDetail() {
             document.getElementById('student-detail').style.display = 'none';
         }
+
+        // Öğrenci Ad/Soyad Modal Akışı
+        async function ensureStudentProfile(userId, role) {
+            try {
+                // Not: <koleksiyon_adi> yer tutucudur; ihtiyaç halinde değiştirin.
+                // Örn: 'students' koleksiyonunu kullanıyoruz.
+                const studentDoc = await db.collection('students').doc(userId).get();
+                const hasName = studentDoc.exists && studentDoc.data() && (studentDoc.data().firstName || studentDoc.data().lastName);
+                if (!hasName) {
+                    openStudentNameModal(role);
+                }
+            } catch (error) {
+                console.error('Öğrenci profil kontrol hatası:', error);
+            }
+        }
+
+        function openStudentNameModal(role) {
+            const modal = document.getElementById('student-name-modal');
+            if (!modal) return;
+            document.getElementById('student-first-name').value = '';
+            document.getElementById('student-last-name').value = '';
+            clearError('student-name-form-error');
+            const titleEl = document.getElementById('student-name-modal-title');
+            if (titleEl) {
+                // Başlığı role göre güncelle
+                const roleTitle = role === 'teacher' ? 'Öğretmen Bilgileri' : 'Öğrenci Bilgileri';
+                titleEl.textContent = roleTitle; // <role>-specific heading
+            }
+            modal.style.display = 'flex';
+        }
+
+        function closeStudentNameModal() {
+            const modal = document.getElementById('student-name-modal');
+            if (!modal) return;
+            modal.style.display = 'none';
+        }
+
+        async function saveStudentName() {
+            const firstName = (document.getElementById('student-first-name').value || '').trim();
+            const lastName = (document.getElementById('student-last-name').value || '').trim();
+            const user = auth.currentUser;
+            
+            if (!user) {
+                showError('student-name-form-error', 'Önce giriş yapmalısınız.');
+                return;
+            }
+            
+            if (!firstName || !lastName) {
+                showError('student-name-form-error', 'Lütfen ad ve soyad girin.');
+                return;
+            }
+            
+            try {
+                // Not: <koleksiyon_adi> yer tutucudur; projenize göre güncelleyin.
+                // Burada 'students' koleksiyonuna kaydediyoruz.
+                await db.collection('students').doc(user.uid).set({
+                    firstName: firstName,
+                    lastName: lastName,
+                    fullName: `${firstName} ${lastName}`,
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                }, { merge: true });
+                closeStudentNameModal();
+                showToast('Bilgileriniz kaydedildi.', 'success');
+                // Başlıktaki adı güncelle
+                await updateStudentFullNameDisplay(user);
+                await updateTeacherFullNameDisplay(user);
+            } catch (error) {
+                showError('student-name-form-error', 'Kayıt sırasında hata oluştu.');
+                console.error('Öğrenci bilgileri kaydetme hatası:', error);
+            }
+        }
+
+        // Başlık altında ad soyad gösterimi
+        async function updateStudentFullNameDisplay(user) {
+            try {
+                const row = document.getElementById('student-fullname-row');
+                const nameEl = document.getElementById('student-fullname');
+                if (!row || !nameEl) return;
+                const fullName = await computeUserFullName(user);
+                nameEl.textContent = fullName;
+                row.style.display = fullName ? 'flex' : 'none';
+            } catch (error) {
+                console.error('Ad soyad görüntüleme hatası:', error);
+            }
+        }
+
+        async function updateTeacherFullNameDisplay(user) {
+            try {
+                const row = document.getElementById('teacher-fullname-row');
+                const nameEl = document.getElementById('teacher-fullname');
+                if (!row || !nameEl) return;
+                const fullName = await computeUserFullName(user);
+                nameEl.textContent = fullName;
+                row.style.display = fullName ? 'flex' : 'none';
+            } catch (error) {
+                console.error('Öğretmen ad soyad görüntüleme hatası:', error);
+            }
+        }
+
+        // Kullanıcı adı tespitini merkezi hale getirir
+        async function computeUserFullName(user) {
+            let fullName = '';
+            try {
+                // Öncelik: students koleksiyonu (öğrenciler için)
+                const docSnap = await db.collection('students').doc(user.uid).get();
+                if (docSnap.exists) {
+                    const d = docSnap.data();
+                    if (d && (d.fullName || (d.firstName && d.lastName))) {
+                        fullName = d.fullName || `${d.firstName} ${d.lastName}`;
+                    }
+                }
+            } catch {}
+            if (!fullName && user.displayName) {
+                // Alternatif: Firebase Auth displayName
+                fullName = user.displayName;
+            }
+            if (!fullName) {
+                // Son çare: e-posta
+                fullName = user.email || '';
+            }
+            return fullName;
+        }
         
         function loadStudentsData() {
             // Filtreleme yapılmış öğrenci verilerini yükle
@@ -1844,6 +2077,154 @@
             // Geçmiş sekmesi seçilirse geçmişi güncelle
             if (tabName === 'history') {
                 loadHistory();
+            }
+        }
+
+        // Sınıf yönetimi: UI aksiyonları
+        let currentSelectedClassId = null;
+        function openCreateClassModal() {
+            clearError('create-class-error');
+            document.getElementById('class-name-input').value = '';
+            document.getElementById('create-class-modal').style.display = 'flex';
+        }
+        function closeCreateClassModal() {
+            document.getElementById('create-class-modal').style.display = 'none';
+        }
+        function openAddStudentModal(classId) {
+            currentSelectedClassId = classId;
+            clearError('add-student-error');
+            document.getElementById('add-student-email').value = '';
+            document.getElementById('add-student-modal').style.display = 'flex';
+        }
+        function closeAddStudentModal() {
+            document.getElementById('add-student-modal').style.display = 'none';
+        }
+
+        // Sınıf oluşturma
+        async function createClass() {
+            const user = auth.currentUser;
+            if (!user) {
+                showToast('Oturum bulunamadı', 'error');
+                return;
+            }
+            // Sadece öğretmenler sınıf oluşturabilir
+            const role = await checkUserRole(user.uid);
+            if (role !== 'teacher') {
+                showError('create-class-error', 'Sadece öğretmenler sınıf oluşturabilir.');
+                return;
+            }
+            const name = (document.getElementById('class-name-input').value || '').trim();
+            if (!name) {
+                showError('create-class-error', 'Lütfen sınıf adı girin.');
+                return;
+            }
+            try {
+                // Firestore: classes koleksiyonuna ekle (öğretmeni owner olarak ilişkilendir)
+                const clsRef = await db.collection('classes').add({
+                    name: name,
+                    ownerId: user.uid,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    memberIds: []
+                });
+                closeCreateClassModal();
+                showToast('Sınıf oluşturuldu.', 'success');
+                await loadTeacherClasses();
+            } catch (e) {
+                showError('create-class-error', 'Sınıf oluşturulurken hata oluştu: ' + (e && e.message ? e.message : ''));
+                console.error('createClass error', e);
+            }
+        }
+
+        // Sınıfları yükle
+        async function loadTeacherClasses() {
+            const user = auth.currentUser;
+            if (!user) return;
+            try {
+                const snap = await db.collection('classes')
+                    .where('ownerId', '==', user.uid)
+                    .get();
+                if (snap.empty) {
+                    document.getElementById('classes-container').innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-school"></i>
+                            <p>Henüz sınıf oluşturmadınız</p>
+                        </div>
+                    `;
+                    return;
+                }
+                const docs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+                docs.sort((a, b) => {
+                    const ta = (a.createdAt && a.createdAt.toMillis) ? a.createdAt.toMillis() : 0;
+                    const tb = (b.createdAt && b.createdAt.toMillis) ? b.createdAt.toMillis() : 0;
+                    return tb - ta;
+                });
+                let html = '';
+                docs.forEach(c => {
+                    const id = c.id;
+                    const count = (c.memberIds && c.memberIds.length) || 0;
+                    html += `
+                        <div class="student-item">
+                            <div class="student-name">${c.name}</div>
+                            <div class="student-stats">
+                                <span>${count} öğrenci</span>
+                                <button class="teacher-action-btn" onclick="openAddStudentModal('${id}')"><i class='fas fa-user-plus'></i> Ekle</button>
+                            </div>
+                        </div>
+                    `;
+                });
+                document.getElementById('classes-container').innerHTML = html;
+            } catch (e) {
+                console.error('loadTeacherClasses error', e);
+                document.getElementById('classes-container').innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <p>Sınıflar yüklenirken hata oluştu: ${(e && e.message) ? e.message : ''}</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Öğrenci ekleme onayı
+        async function confirmAddStudentToClass() {
+            const user = auth.currentUser;
+            if (!user) return;
+            const email = (document.getElementById('add-student-email').value || '').trim().toLowerCase();
+            if (!email) {
+                showError('add-student-error', 'Lütfen e-posta girin.');
+                return;
+            }
+            if (!currentSelectedClassId) {
+                showError('add-student-error', 'Sınıf seçilemedi.');
+                return;
+            }
+            try {
+                // Sadece sınıf sahibi öğrenci ekleyebilir
+                const clsDoc = await db.collection('classes').doc(currentSelectedClassId).get();
+                if (!clsDoc.exists) {
+                    showError('add-student-error', 'Sınıf bulunamadı.');
+                    return;
+                }
+                if (clsDoc.data().ownerId !== user.uid) {
+                    showError('add-student-error', 'Bu sınıfa öğrenci ekleme yetkiniz yok.');
+                    return;
+                }
+                // Kullanıcıyı email ile bul (users koleksiyonunda email alanına göre)
+                const qs = await db.collection('users').where('email', '==', email).where('role', '==', 'student').limit(1).get();
+                if (qs.empty) {
+                    showError('add-student-error', 'Bu e-posta ile kayıtlı öğrenci bulunamadı.');
+                    return;
+                }
+                const studentId = qs.docs[0].id;
+                const classRef = db.collection('classes').doc(currentSelectedClassId);
+                await classRef.update({
+                    memberIds: firebase.firestore.FieldValue.arrayUnion(studentId)
+                });
+                closeAddStudentModal();
+                showToast('Öğrenci sınıfa eklendi.', 'success');
+                await loadTeacherClasses();
+            } catch (e) {
+                console.error('confirmAddStudentToClass error', e);
+                showError('add-student-error', 'Öğrenci eklenirken hata oluştu.');
             }
         }
 
