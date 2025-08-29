@@ -51,7 +51,7 @@
             margin: 10px 0;
             font-weight: 500;
         }
-
+        
         .user-fullname-row {
             display: none;
             align-items: center;
@@ -222,7 +222,7 @@
         .btn-primary {
             background: #4e54c8;
             color: white;
-            flex: 1;
+            flex: 3;
             margin-right: 10px;
         }
         
@@ -246,6 +246,7 @@
             color: #4e54c8;
             border: 2px solid #4e54c8;
             flex: 1;
+            padding: 10px 14px;
         }
         .btn-join:hover {
             background: #4e54c8;
@@ -875,6 +876,30 @@
         
         .toast-icon { font-size: 1.1rem; }
         .toast-text { font-weight: 500; }
+
+        /* Hatırlatmalar görünümü */
+        .reminder-card {
+            background: #f8f9fa;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 12px;
+            margin: 10px 0;
+        }
+        .reminder-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 6px;
+        }
+        .reminder-sender {
+            font-weight: 600;
+            color: #374151;
+        }
+        .reminder-date {
+            font-size: 0.85rem;
+            color: #6b7280;
+        }
+        .reminder-text { color: #111827; }
     </style>
     
     <!-- Firebase App ve Authentication SDK'ları -->
@@ -943,6 +968,8 @@
             <div class="tabs">
                 <div class="tab active" onclick="showTab('today')">Bugün</div>
                 <div class="tab" onclick="showTab('history')">Geçmiş</div>
+                <div class="tab" onclick="showTab('reminders')">Hatırlatmalarım</div>
+                <div class="tab" onclick="showTab('goals')">Hedeflerim</div>
             </div>
             
             <div class="tab-content active" id="today-tab">
@@ -1013,6 +1040,36 @@
                     </div>
                 </div>
             </div>
+
+            <div class="tab-content" id="reminders-tab">
+                <div class="history-container">
+                    <div class="history-title">
+                        <i class="fas fa-bell"></i> Hatırlatmalarım
+                    </div>
+                    <div id="student-reminders-list">
+                        <div class="loading">
+                            <i class="fas fa-spinner"></i> Yükleniyor...
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="goals-tab">
+                <div class="history-container">
+                    <div class="history-title" style="display: flex; align-items: center; justify-content: space-between;">
+                        <span><i class="fas fa-bullseye"></i> Hedeflerim</span>
+                        <div style="display:flex; gap:8px; align-items:center;">
+                            <input type="text" id="new-goal-input" class="filter-input" placeholder="Yeni hedef..." style="min-width: 180px;">
+                            <button class="auth-btn" onclick="addGoal()"><i class="fas fa-plus"></i> Ekle</button>
+                        </div>
+                    </div>
+                    <div id="goals-list">
+                        <div class="loading">
+                            <i class="fas fa-spinner"></i> Yükleniyor...
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         
         <!-- Öğretmen Paneli -->
@@ -1035,31 +1092,15 @@
             
             
             <div class="teacher-actions">
-                <button class="teacher-action-btn" onclick="sendReminders()">
+                <button class="teacher-action-btn" onclick="openReminderModal()">
                     <i class="fas fa-bell"></i> Hatırlatma Gönder
-                </button>
-                <button class="teacher-action-btn" onclick="showStatistics()">
-                    <i class="fas fa-chart-bar"></i> İstatistikleri Görüntüle
                 </button>
                 <button class="teacher-action-btn" onclick="openCreateClassModal()">
                     <i class="fas fa-plus"></i> Sınıf Oluştur
                 </button>
             </div>
             
-            <div class="stats">
-                <div class="stat-box">
-                    <div class="stat-value" id="total-students">0</div>
-                    <div class="stat-label">Toplam Öğrenci</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-value" id="avg-questions">0</div>
-                    <div class="stat-label">Ort. Soru Sayısı</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-value" id="avg-pages">0</div>
-                    <div class="stat-label">Ort. Sayfa Sayısı</div>
-                </div>
-            </div>
+            
             
             
 
@@ -1199,6 +1240,33 @@
         </div>
     </div>
 
+    <!-- Hatırlatma Gönder (Öğretmen) -->
+    <div id="reminder-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h3>Hatırlatma Gönder</h3>
+            <p>Bir sınıf seçin ve hatırlatma mesajını yazın.</p>
+            <select id="reminder-class-select" class="modal-input"></select>
+            <textarea id="reminder-text" class="modal-input" placeholder="Mesaj" style="height: 100px;"></textarea>
+            <div id="reminder-error" class="form-error"></div>
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-secondary" onclick="closeReminderModal()">İptal</button>
+                <button class="modal-btn modal-btn-primary" onclick="sendReminderToClass()">Gönder</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Öğrenci Hatırlatma Modalı (bloklayıcı) -->
+    <div id="student-reminder-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h3 id="student-reminder-title">Hatırlatma</h3>
+            <span id="student-reminder-owner" style="display:none; color:#374151; font-weight:600;">Gönderen: </span>
+            <p id="student-reminder-text" style="margin-top: 6px;"></p>
+            <div class="modal-buttons" style="justify-content: center;">
+                <button class="modal-btn modal-btn-primary" onclick="acknowledgeStudentReminder()">Tamam</button>
+            </div>
+        </div>
+    </div>
+
     <div class="motivation">
         <p>"Başarı, küçük çabaların sürekliliğinden doğar." - Robert Collier</p>
     </div>
@@ -1243,6 +1311,8 @@
                     showStudentPanel();
                     // Ad soyad bilgisini başlık altında göster
                     await updateStudentFullNameDisplay(user);
+                    // Hatırlatma dinleyicisini başlat
+                    startStudentReminderListener(user.uid);
                     // Bugünün verilerini yükle
                     loadTodaysData();
                     
@@ -1278,6 +1348,7 @@
                 if (row) row.style.display = 'none';
                 const trow = document.getElementById('teacher-fullname-row');
                 if (trow) trow.style.display = 'none';
+                stopStudentReminderListener();
             }
         });
         
@@ -1379,15 +1450,15 @@
                 document.getElementById('continue-btn').disabled = true;
                 document.querySelectorAll('.role-option').forEach(opt => opt.classList.remove('selected'));
             };
-            
+                
             // Eğer kullanıcı oturum açmışsa çıkış yap, değilse sadece UI'ı sıfırla
             if (auth.currentUser) {
                 auth.signOut().then(() => {
                     resetUIToRoleSelection();
-                    showToast('Çıkış yapıldı.', 'info');
-                }).catch((error) => {
-                    showToast('Çıkış hatası: ' + (error?.message || ''), 'error');
-                });
+                showToast('Çıkış yapıldı.', 'info');
+            }).catch((error) => {
+                showToast('Çıkış hatası: ' + (error?.message || ''), 'error');
+            });
             } else {
                 resetUIToRoleSelection();
             }
@@ -1618,54 +1689,62 @@
         }
         
         // Günlük verileri kaydetme fonksiyonu
-        function saveDailyData() {
+        async function saveDailyData() {
             const user = auth.currentUser;
             if (!user) {
                 showToast('Lütfen önce giriş yapın!', 'warning');
                 return;
             }
-            
-            const now = new Date();
-            const dateKey = now.toISOString().split('T')[0]; // YYYY-MM-DD formatında tarih
-            
-            // Bugünün verilerini al
-            const dailyData = {
-                date: now.toLocaleDateString('tr-TR'),
-                turkce: parseInt(document.getElementById('turkce').value) || 0,
-                matematik: parseInt(document.getElementById('matematik').value) || 0,
-                fen: parseInt(document.getElementById('fen').value) || 0,
-                inkilap: parseInt(document.getElementById('inkilap').value) || 0,
-                din: parseInt(document.getElementById('din').value) || 0,
-                ingilizce: parseInt(document.getElementById('ingilizce').value) || 0,
-                sayfa: parseInt(document.getElementById('sayfa').value) || 0,
-                timestamp: firebase.firestore.FieldValue.serverTimestamp()
-            };
-            
-            // Toplam soru sayısını hesapla
-            dailyData.total = dailyData.turkce + dailyData.matematik + dailyData.fen + 
-                             dailyData.inkilap + dailyData.din + dailyData.ingilizce;
-            
-            // Firestore'a kaydet
-            db.collection("users").doc(user.uid).collection("days").doc(dateKey)
-                .set(dailyData)
-                .then(() => {
-                    showToast('Bugünkü verileriniz kaydedildi!', 'success');
-                    
-                    // Inputları disable yap
-                    const inputs = document.querySelectorAll('input');
-                    inputs.forEach(input => {
-                        input.disabled = true;
-                    });
-                    
-                    document.getElementById('save-btn').disabled = true;
-                    document.getElementById('save-btn').innerHTML = '<i class="fas fa-check"></i> Bugün Kaydedildi';
-                    
-                    // Kullanıcı istatistiklerini güncelle
-                    updateUserStats(user.uid, dailyData);
-                })
-                .catch((error) => {
-                    showToast("Kayıt hatası: " + error.message, 'error');
-                });
+            const saveBtn = document.getElementById('save-btn');
+            try {
+                saveBtn.disabled = true;
+                saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Kaydediliyor...';
+                const now = new Date();
+                const dateKey = now.toISOString().split('T')[0]; // YYYY-MM-DD
+                
+                // Sayısal verileri güvenli şekilde al (negatifleri 0'a sabitle)
+                const toNonNegInt = (v) => {
+                    const n = parseInt(v, 10);
+                    return Number.isFinite(n) && n > 0 ? n : 0;
+                };
+                const dailyData = {
+                    date: now.toLocaleDateString('tr-TR'),
+                    turkce: toNonNegInt(document.getElementById('turkce').value),
+                    matematik: toNonNegInt(document.getElementById('matematik').value),
+                    fen: toNonNegInt(document.getElementById('fen').value),
+                    inkilap: toNonNegInt(document.getElementById('inkilap').value),
+                    din: toNonNegInt(document.getElementById('din').value),
+                    ingilizce: toNonNegInt(document.getElementById('ingilizce').value),
+                    sayfa: toNonNegInt(document.getElementById('sayfa').value),
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                };
+                dailyData.total = dailyData.turkce + dailyData.matematik + dailyData.fen + dailyData.inkilap + dailyData.din + dailyData.ingilizce;
+                
+                // Ebeveyn dokümanı yoksa oluşturmaya çalış (merge)
+                await db.collection('users').doc(user.uid).set({ uid: user.uid }, { merge: true });
+                // Gün dokümanını yaz
+                await db.collection('users').doc(user.uid).collection('days').doc(dateKey).set(dailyData, { merge: true });
+                
+                showToast('Bugünkü verileriniz kaydedildi!', 'success');
+                // Inputları kilitle
+                document.querySelectorAll('#student-panel input').forEach(input => { input.disabled = true; });
+                saveBtn.disabled = true;
+                saveBtn.innerHTML = '<i class="fas fa-check"></i> Bugün Kaydedildi';
+                // Kullanıcı istatistiklerini güncelle
+                await updateUserStats(user.uid, dailyData);
+            } catch (error) {
+                const msg = error && error.message ? error.message : '';
+                // Yetki hatasında yardımcı ipucu göster
+                if (msg.includes('Missing or insufficient permissions') || (error && error.code === 'permission-denied')) {
+                    showToast('Kayıt yetkisi yok. Kurallarda users/{uid}/days yazma iznini açın.', 'error');
+                } else {
+                    showToast('Kayıt hatası: ' + msg, 'error');
+                }
+                if (saveBtn) {
+                    saveBtn.disabled = false;
+                    saveBtn.innerHTML = '<i class="fas fa-save"></i> Günü Kaydet';
+                }
+            }
         }
         
         // Kullanıcı istatistiklerini güncelleme
@@ -1701,6 +1780,7 @@
                         sayfa: dailyData.sayfa,
                         lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
                     });
+                    
                 }
             } catch (error) {
                 console.error("İstatistik güncelleme hatası:", error);
@@ -1763,6 +1843,79 @@
                     `;
                     console.log("Geçmiş yükleme hatası:", error);
                 });
+        }
+
+        // Öğrenci: Hatırlatmalarım sekmesi veri yükleme
+        async function loadStudentReminders() {
+            const user = auth.currentUser;
+            if (!user) {
+                document.getElementById('student-reminders-list').innerHTML = `
+                    <div class="empty-state"><i class="fas fa-info-circle"></i> Giriş yapın</div>
+                `;
+                return;
+            }
+            document.getElementById('student-reminders-list').innerHTML = `
+                <div class="loading"><i class="fas fa-spinner"></i> Yükleniyor...</div>
+            `;
+            try {
+                // Üye olduğu sınıfları topla
+                const classesSnap = await db.collection('classes').where('memberIds', 'array-contains', user.uid).get();
+                if (classesSnap.empty) {
+                    document.getElementById('student-reminders-list').innerHTML = `
+                        <div class="empty-state"><i class="fas fa-bell-slash"></i> Hatırlatma yok</div>
+                    `;
+                    return;
+                }
+                let reminders = [];
+                for (const c of classesSnap.docs) {
+                    const classId = c.id;
+                    const rs = await db.collection('classes').doc(classId).collection('reminders')
+                        .orderBy('createdAt', 'desc').limit(20).get();
+                    rs.forEach(r => reminders.push({ id: r.id, classId, ...r.data() }));
+                }
+                if (!reminders.length) {
+                    document.getElementById('student-reminders-list').innerHTML = `
+                        <div class="empty-state"><i class="fas fa-bell-slash"></i> Hatırlatma yok</div>
+                    `;
+                    return;
+                }
+                // Tarihe göre sırala
+                reminders.sort((a,b) => ((b.createdAt?.toMillis?.()||0) - (a.createdAt?.toMillis?.()||0)));
+                let html = '';
+                for (const r of reminders) {
+                    // Gönderen adı
+                    let sender = r.senderName || '';
+                    try {
+                        if (!sender && r.ownerId) {
+                            const sDoc = await db.collection('students').doc(r.ownerId).get();
+                            if (sDoc.exists) {
+                                const sd = sDoc.data();
+                                sender = sd.fullName || ((sd.firstName && sd.lastName) ? `${sd.firstName} ${sd.lastName}` : sender);
+                            } else {
+                                const uDoc = await db.collection('users').doc(r.ownerId).get();
+                                if (uDoc.exists) sender = uDoc.data().email || sender;
+                            }
+                        }
+                    } catch {}
+                    const dt = r.createdAt?.toDate ? r.createdAt.toDate() : null;
+                    const dateStr = dt ? dt.toLocaleString('tr-TR') : '';
+                    html += `
+                        <div class="reminder-card">
+                            <div class="reminder-header">
+                                <span class="reminder-sender"><i class='fas fa-chalkboard-teacher'></i> ${sender}</span>
+                                <span class="reminder-date">${dateStr}</span>
+                            </div>
+                            <div class="reminder-text">${r.text}</div>
+                        </div>
+                    `;
+                }
+                document.getElementById('student-reminders-list').innerHTML = html;
+            } catch (e) {
+                console.error('loadStudentReminders error', e);
+                document.getElementById('student-reminders-list').innerHTML = `
+                    <div class="empty-state"><i class="fas fa-exclamation-triangle"></i> Yüklenemedi</div>
+                `;
+            }
         }
         
         // Öğretmen paneli işlevleri
@@ -1957,7 +2110,7 @@
         function hideStudentDetail() {
             document.getElementById('student-detail').style.display = 'none';
         }
-
+        
         // Öğrenci Ad/Soyad Modal Akışı
         async function ensureStudentProfile(userId, role) {
             try {
@@ -2018,6 +2171,15 @@
                     fullName: `${firstName} ${lastName}`,
                     updatedAt: firebase.firestore.FieldValue.serverTimestamp()
                 }, { merge: true });
+                // Öğretmen adı e-posta ile de tanımlı olsun ( öğretmen profilleri )
+                try {
+                    if (user.email) {
+                        await db.collection('teacherProfiles').doc(user.email).set({
+                            fullName: `${firstName} ${lastName}`,
+                            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                        }, { merge: true });
+                    }
+                } catch {}
                 closeStudentNameModal();
                 showToast('Bilgileriniz kaydedildi.', 'success');
                 // Başlıktaki adı güncelle
@@ -2079,12 +2241,212 @@
             }
             return fullName;
         }
+
+        // Öğrenci: sınıf hatırlatma dinleyicisi
+        let remindersUnsub = null;
+        async function startStudentReminderListener(uid) {
+            stopStudentReminderListener();
+            try {
+                // Öğrencinin bulunduğu sınıfları bul
+                const snap = await db.collection('classes').where('memberIds', 'array-contains', uid).get();
+                if (snap.empty) return;
+                // Birden fazla sınıf varsa hepsi için dinleyici kur
+                const unsubscribers = [];
+                snap.forEach(doc => {
+                    const classId = doc.id;
+                    const unsub = db.collection('classes').doc(classId)
+                        .collection('reminders')
+                        .orderBy('createdAt', 'asc')
+                        .onSnapshot(qs => {
+                            // Tüm mevcut/gelen hatırlatmaları sırayla göster
+                            qs.forEach(d => {
+                                const data = d.data();
+                                if (data && data.text) {
+                                    // Global payload sakla ki modal doğrudan kullanabilsin
+                                    window.__lastReminderPayload = { text: data.text, ownerId: data.ownerId, senderName: data.senderName, ownerName: data.ownerName };
+                                    showStudentReminderModal(data.text, data.ownerId, data.ownerName || data.senderName);
+                                }
+                            });
+                        }, (err) => {
+                            console.error('Reminder listener error', err);
+                        });
+                    unsubscribers.push(unsub);
+                });
+                // Tek bir fonksiyonla tümünü kapatmak için sarmalayıcı
+                remindersUnsub = () => unsubscribers.forEach(u => { try { u(); } catch {} });
+            } catch (e) {
+                console.error('startStudentReminderListener error', e);
+            }
+        }
+        function stopStudentReminderListener() {
+            if (typeof remindersUnsub === 'function') {
+                try { remindersUnsub(); } catch {}
+            }
+            remindersUnsub = null;
+        }
+
+        // Öğrenci: Hatırlatma modalını göster/gizle
+        async function showStudentReminderModal(text, ownerId, ownerNameFromDoc) {
+            const modal = document.getElementById('student-reminder-modal');
+            const title = document.getElementById('student-reminder-title');
+            const p = document.getElementById('student-reminder-text');
+            if (!modal || !p || !title) return;
+            let sender = (ownerNameFromDoc || '').trim();
+            try {
+                // Öncelik: payload içindeki senderName
+                if (!sender) {
+                    const last = window.__lastReminderPayload;
+                    if (last && last.text === text && last.ownerId === ownerId && last.senderName) {
+                        sender = last.senderName;
+                    }
+                }
+                // Yoksa ownerId'den türet
+                if (!sender && ownerId) {
+                    const sDoc = await db.collection('students').doc(ownerId).get();
+                    if (sDoc.exists) {
+                        const sd = sDoc.data();
+                        sender = sd.fullName || ((sd.firstName && sd.lastName) ? `${sd.firstName} ${sd.lastName}` : '');
+                    }
+                    if (!sender) {
+                        const uDoc = await db.collection('users').doc(ownerId).get();
+                        if (uDoc.exists) sender = uDoc.data().email || '';
+                    }
+                }
+            } catch {}
+            const senderDisplay = (sender || '').trim();
+            const isUnknown = !senderDisplay || /@/.test(senderDisplay) || senderDisplay.toLowerCase() === 'hocadan';
+            title.textContent = isUnknown ? 'HATIRLATMA' : `HATIRLATMA - ${senderDisplay} HOCADAN`;
+            p.textContent = text;
+            modal.style.display = 'flex';
+        }
+        function acknowledgeStudentReminder() {
+            const modal = document.getElementById('student-reminder-modal');
+            if (!modal) return;
+            modal.style.display = 'none';
+        }
+
+        // Genel amaçlı: classId/reminderId ile hatırlatma pop-up'ını doldur ve göster
+        // Not: Firestore yolları ve ayarlar için <firebase_ayarlarınız> yer tutucudur.
+        async function showReminderPopup(classId, reminderId) {
+            try {
+                const docRef = db.collection('classes').doc(classId)
+                    .collection('reminders').doc(reminderId);
+                const snap = await docRef.get();
+                if (!snap.exists) {
+                    console.warn('Hatırlatma bulunamadı:', classId, reminderId);
+                    return;
+                }
+                const data = snap.data();
+                const title = (data && (data.title || 'Hatırlatma'));
+                const message = (data && (data.message || data.text || ''));
+                const ownerName = (data && (data.ownerName || data.senderName || ''));
+
+                const modal = document.getElementById('student-reminder-modal');
+                const titleEl = document.getElementById('student-reminder-title');
+                const textEl = document.getElementById('student-reminder-text');
+                const ownerEl = document.getElementById('student-reminder-owner');
+                if (!modal || !titleEl || !textEl || !ownerEl) return;
+
+                titleEl.textContent = title;
+                textEl.textContent = message;
+                if (ownerName && ownerName.trim().length > 0) {
+                    ownerEl.style.display = 'block';
+                    ownerEl.textContent = `Gönderen: ${ownerName}`;
+                } else {
+                    ownerEl.style.display = 'none';
+                    ownerEl.textContent = '';
+                }
+                modal.style.display = 'flex';
+            } catch (err) {
+                console.error('showReminderPopup hata:', err);
+            }
+        }
         
         
         
-        function sendReminders() {
-            showToast('Hatırlatma mesajları gönderildi', 'success');
-            // Burada hatırlatma gönderme işlemleri yapılacak
+        // Hatırlatma gönderme akışı (öğretmen)
+        function openReminderModal() {
+            clearError('reminder-error');
+            document.getElementById('reminder-text').value = '';
+            populateReminderClassSelect();
+            document.getElementById('reminder-modal').style.display = 'flex';
+        }
+        function closeReminderModal() {
+            document.getElementById('reminder-modal').style.display = 'none';
+        }
+        async function populateReminderClassSelect() {
+            const user = auth.currentUser;
+            const select = document.getElementById('reminder-class-select');
+            select.innerHTML = '<option value="">Sınıf seçin</option>';
+            if (!user) return;
+            try {
+                const snap = await db.collection('classes').where('ownerId', '==', user.uid).get();
+                snap.forEach(d => {
+                    const c = d.data();
+                    const opt = document.createElement('option');
+                    opt.value = d.id;
+                    opt.textContent = c.name || d.id;
+                    select.appendChild(opt);
+                });
+            } catch (e) {
+                console.error('populateReminderClassSelect error', e);
+            }
+        }
+        async function sendReminderToClass() {
+            const user = auth.currentUser;
+            if (!user) return;
+            const classId = document.getElementById('reminder-class-select').value;
+            const text = (document.getElementById('reminder-text').value || '').trim();
+            if (!classId) {
+                showError('reminder-error', 'Lütfen bir sınıf seçin.');
+                return;
+            }
+            if (!text) {
+                showError('reminder-error', 'Lütfen mesaj yazın.');
+                return;
+            }
+            try {
+                // Sınıfın sahibi mi?
+                const clsSnap = await db.collection('classes').doc(classId).get();
+                if (!clsSnap.exists) {
+                    showError('reminder-error', 'Sınıf bulunamadı.');
+                    return;
+                }
+                const clsData = clsSnap.data();
+                if (clsData.ownerId !== user.uid) {
+                    showError('reminder-error', 'Bu sınıfa hatırlatma gönderme yetkiniz yok.');
+                    return;
+                }
+                // Gönderen adını belirle (öncelik: students fullName; yoksa displayName/email)
+                let senderName = '';
+                try {
+                    // Öncelik: teacherProfiles/{email}.fullName
+                    if (user.email) {
+                        const tDoc = await db.collection('teacherProfiles').doc(user.email).get();
+                        if (tDoc.exists && tDoc.data().fullName) senderName = tDoc.data().fullName;
+                    }
+                    // Alternatif: students/{uid}.fullName
+                    if (!senderName) senderName = await computeUserFullName(user);
+                } catch {}
+                // Sınıfın alt koleksiyonuna reminder ekle
+                await db.collection('classes').doc(classId).collection('reminders').add({
+                    text: text,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    ownerId: user.uid,
+                    senderName: senderName,
+                    ownerName: senderName
+                });
+                closeReminderModal();
+                showToast('Hatırlatma gönderildi.', 'success');
+            } catch (e) {
+                console.error('sendReminderToClass error', e);
+                const msg = (e && e.message) ? e.message : '';
+                if (msg.includes('Missing or insufficient permissions') || (e && e.code === 'permission-denied')) {
+                    showError('reminder-error', 'Yetki hatası: Hatırlatmalar için sınıf sahibine update/create izni verin (classes/{classId}/reminders alt koleksiyonu).');
+                } else {
+                    showError('reminder-error', 'Hatırlatma gönderilirken hata oluştu: ' + msg);
+                }
+            }
         }
         
         function showStatistics() {
@@ -2114,7 +2476,8 @@
             
             // İlgili tab başlığını aktif yap
             document.querySelectorAll('.tab').forEach(tab => {
-                if (tab.textContent === (tabName === 'today' ? 'Bugün' : 'Geçmiş')) {
+                const map = { today: 'Bugün', history: 'Geçmiş', reminders: 'Hatırlatmalarım', goals: 'Hedeflerim' };
+                if (tab.textContent === map[tabName]) {
                     tab.classList.add('active');
                 }
             });
@@ -2122,6 +2485,12 @@
             // Geçmiş sekmesi seçilirse geçmişi güncelle
             if (tabName === 'history') {
                 loadHistory();
+            }
+            if (tabName === 'reminders') {
+                loadStudentReminders();
+            }
+            if (tabName === 'goals') {
+                loadGoals();
             }
         }
 
@@ -2356,6 +2725,8 @@
                 await clsRef.update({ memberIds: firebase.firestore.FieldValue.arrayUnion(user.uid) });
                 closeJoinClassModal();
                 showToast('Sınıfa katıldınız.', 'success');
+                // Sınıfın hatırlatmalarını dinlemeye başla
+                startStudentReminderListener(user.uid);
             } catch (e) {
                 console.error('joinClassById error', e);
                 const msg = (e && e.message) ? e.message : '';
@@ -2468,6 +2839,56 @@
                 showToast('Sınıf ID kopyalandı.', 'success');
             } catch {
                 showToast('Kopyalama başarısız.', 'error');
+            }
+        }
+
+        // Öğrenci: Hedeflerim (basit CRUD)
+        async function loadGoals() {
+            const user = auth.currentUser;
+            if (!user) {
+                document.getElementById('goals-list').innerHTML = '<div class="empty-state">Giriş yapın</div>';
+                return;
+            }
+            document.getElementById('goals-list').innerHTML = '<div class="loading"><i class="fas fa-spinner"></i> Yükleniyor...</div>';
+            try {
+                const snap = await db.collection('users').doc(user.uid).collection('goals')
+                    .orderBy('createdAt', 'desc').get();
+                if (snap.empty) {
+                    document.getElementById('goals-list').innerHTML = '<div class="empty-state">Hedef yok</div>';
+                    return;
+                }
+                let html = '';
+                snap.forEach(d => {
+                    const g = d.data();
+                    const dt = g.createdAt?.toDate ? g.createdAt.toDate().toLocaleString('tr-TR') : '';
+                    html += `
+                        <div class="history-item">
+                            <div class="history-date">${dt}</div>
+                            <div class="history-stats">${g.text || ''}</div>
+                        </div>
+                    `;
+                });
+                document.getElementById('goals-list').innerHTML = html;
+            } catch (e) {
+                console.error('loadGoals error', e);
+                document.getElementById('goals-list').innerHTML = '<div class="empty-state">Yüklenemedi</div>';
+            }
+        }
+        async function addGoal() {
+            const user = auth.currentUser;
+            if (!user) return;
+            const input = document.getElementById('new-goal-input');
+            const text = (input.value || '').trim();
+            if (!text) return;
+            try {
+                await db.collection('users').doc(user.uid).collection('goals').add({
+                    text,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                input.value = '';
+                loadGoals();
+            } catch (e) {
+                console.error('addGoal error', e);
             }
         }
 
