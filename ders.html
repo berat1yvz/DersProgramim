@@ -664,6 +664,524 @@
             transform: translateY(-2px);
         }
 
+        /* Minimal Sınıf Yönetim Paneli */
+        .class-management-panel {
+            padding: 15px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            margin: 15px 0;
+        }
+        
+        .panel-header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #4e54c8;
+        }
+        
+        .panel-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #4e54c8;
+            margin-bottom: 5px;
+        }
+        
+        .panel-subtitle {
+            font-size: 0.9rem;
+            color: #6c757d;
+            font-weight: 400;
+        }
+        
+        .class-section {
+            margin-bottom: 25px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border: 1px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+        
+        .class-section:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(78, 84, 200, 0.1);
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #4e54c8;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .section-title i {
+            font-size: 1rem;
+            color: #8f94fb;
+        }
+        
+        .class-name {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #6c757d;
+            background: white;
+            padding: 4px 12px;
+            border-radius: 15px;
+            border: 1px solid #dee2e6;
+        }
+        
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .action-card {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .action-card:hover {
+            border-color: #4e54c8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(78, 84, 200, 0.15);
+        }
+        
+        /* Küçük butonlar */
+        .action-card.small-action {
+            padding: 8px;
+            font-size: 0.8rem;
+        }
+        
+        .action-card.small-action .action-title {
+            font-size: 0.75rem;
+            margin-bottom: 2px;
+        }
+        
+        .action-card.small-action .action-desc {
+            font-size: 0.65rem;
+        }
+        
+        .action-card.small-action .action-icon {
+            font-size: 1rem;
+            margin-bottom: 4px;
+        }
+        
+        /* Ana buton - Öğrenci Verileri */
+        .action-card.main-action {
+            background: linear-gradient(135deg, #4e54c8 0%, #8f94fb 100%);
+            border-color: #4e54c8;
+            color: white;
+            padding: 15px;
+            font-weight: 600;
+        }
+        
+        .action-card.main-action:hover {
+            background: linear-gradient(135deg, #3f44a7 0%, #7c83e8 100%);
+            border-color: #3f44a7;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(78, 84, 200, 0.3);
+        }
+        
+        .action-card.main-action .action-icon,
+        .action-card.main-action .action-title,
+        .action-card.main-action .action-desc {
+            color: white;
+        }
+        
+        /* Tehlike butonu */
+        .action-card.danger-action {
+            border-color: #ef4444;
+        }
+        
+        .action-card.danger-action:hover {
+            background: #fef2f2;
+            border-color: #dc2626;
+        }
+        
+        .action-card.danger-action .action-icon,
+        .action-card.danger-action .action-title {
+            color: #dc2626;
+        }
+        
+        .action-icon {
+            font-size: 1.3rem;
+            margin-bottom: 8px;
+            color: #4e54c8;
+            transition: all 0.3s ease;
+        }
+        
+        .action-card:hover .action-icon {
+            transform: scale(1.05);
+            color: #8f94fb;
+        }
+        
+        .action-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 4px;
+        }
+        
+        .action-desc {
+            font-size: 0.75rem;
+            color: #6c757d;
+            line-height: 1.3;
+        }
+        
+        .divider {
+            height: 1px;
+            background: #e9ecef;
+            margin: 20px 0;
+            border-radius: 0;
+        }
+        
+        .stats-overview {
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 8px 15px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            margin: 0 5px;
+        }
+        
+        .stat-value {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #4e54c8;
+            margin-bottom: 2px;
+        }
+        
+        .stat-label {
+            font-size: 0.75rem;
+            color: #6c757d;
+            font-weight: 400;
+        }
+        
+        /* Minimal Sınıf Öğrencileri Sayfası - Light Mode */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        .students-page-container {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8fafc;
+            min-height: 100vh;
+            padding: 20px;
+            color: #1e293b;
+        }
+        
+        .students-page-wrapper {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Ana Başlık */
+        .students-page-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px 0;
+        }
+        
+        .students-page-title {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+        
+        .students-page-subtitle {
+            font-size: 1rem;
+            color: #64748b;
+            font-weight: 400;
+        }
+        
+        /* Minimal Sınıf İstatistikleri */
+        .class-stats-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .class-stats-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .class-stats-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 4px;
+        }
+        
+        .class-stats-subtitle {
+            font-size: 0.9rem;
+            color: #64748b;
+            font-weight: 400;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .stat-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+        
+        .stat-card:hover {
+            background: #f1f5f9;
+            border-color: #cbd5e1;
+        }
+        
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #3b82f6;
+            margin-bottom: 4px;
+            display: block;
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            color: #64748b;
+            font-weight: 500;
+        }
+        
+        /* Minimal Öğrenci Kartları Grid */
+        .students-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        /* Minimal Öğrenci Kartı */
+        .student-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px 12px 0 0;
+            padding: 20px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            margin-bottom: 0;
+        }
+        
+        .student-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-color: #cbd5e1;
+        }
+        
+        /* Öğrenci detay paneli - bitişik görünüm */
+        .student-detail {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-top: none;
+            border-radius: 0 0 12px 12px;
+            margin-top: 0;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .student-detail:hover {
+            background: #f8fafc;
+        }
+        
+        /* Öğrenci Kartı İçeriği */
+        .student-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        
+        .student-info {
+            flex: 1;
+        }
+        
+        .student-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 2px;
+            line-height: 1.3;
+        }
+        
+        .student-email {
+            font-size: 0.85rem;
+            color: #64748b;
+            font-weight: 400;
+        }
+        
+        /* Minimal Başarı Rozeti */
+        .achievement-badge {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-left: 12px;
+        }
+        
+        .badge-gold {
+            background: #fbbf24;
+            color: #92400e;
+        }
+        
+        .badge-silver {
+            background: #9ca3af;
+            color: #374151;
+        }
+        
+        .badge-bronze {
+            background: #cd7f32;
+            color: #92400e;
+        }
+        
+        .badge-default {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        /* Minimal Öğrenci İstatistikleri */
+        .student-stats {
+            display: flex;
+            gap: 12px;
+            margin-top: 15px;
+        }
+        
+        .stat-item {
+            flex: 1;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 10px;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+        
+        .stat-item:hover {
+            background: #f1f5f9;
+            border-color: #cbd5e1;
+        }
+        
+        .stat-number {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #3b82f6;
+            margin-bottom: 2px;
+            display: block;
+        }
+        
+        .stat-text {
+            font-size: 0.75rem;
+            color: #64748b;
+            font-weight: 500;
+        }
+        
+        /* Responsive Tasarım */
+        @media (max-width: 768px) {
+            .students-page-container {
+                padding: 15px;
+            }
+            
+            .students-page-wrapper {
+                padding: 15px;
+            }
+            
+            .students-page-title {
+                font-size: 2rem;
+            }
+            
+            .class-stats-card {
+                padding: 20px;
+                margin-bottom: 30px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+            
+            .students-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .student-card {
+                padding: 20px;
+            }
+            
+            .student-stats {
+                gap: 12px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .students-page-title {
+                font-size: 1.8rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stat-card {
+                padding: 20px;
+            }
+            
+            .student-card-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .achievement-badge {
+                align-self: center;
+                margin-left: 0;
+            }
+        }
+        
         /* Modern Sınıf kartları */
         .classes-grid {
             display: grid;
@@ -1017,6 +1535,65 @@
         }
         
         @media (max-width: 500px) {
+            .class-management-panel {
+                padding: 10px;
+                margin: 10px 0;
+            }
+            
+            .panel-title {
+                font-size: 1.4rem;
+            }
+            
+            .panel-subtitle {
+                font-size: 0.8rem;
+            }
+            
+            .class-section {
+                padding: 12px;
+                margin-bottom: 20px;
+            }
+            
+            .section-header {
+                flex-direction: column;
+                gap: 8px;
+                align-items: flex-start;
+            }
+            
+            .action-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+            
+            .action-card {
+                padding: 10px;
+            }
+            
+            .action-icon {
+                font-size: 1.1rem;
+            }
+            
+            .action-title {
+                font-size: 0.8rem;
+            }
+            
+            .action-desc {
+                font-size: 0.7rem;
+            }
+            
+            .stats-overview {
+                flex-direction: column;
+                gap: 8px;
+                padding: 8px;
+            }
+            
+            .stat-item {
+                margin: 0;
+            }
+            
+            .stat-value {
+                font-size: 1rem;
+            }
+            
             .subject-item {
                 flex-direction: column;
                 align-items: flex-start;
@@ -1358,7 +1935,7 @@
         <!-- Öğretmen Paneli -->
         <div id="teacher-panel" class="teacher-dashboard" style="display: none;">
             <header>
-                <h1>I'KOCH - ÖĞRETMEN PANELİ</h1>
+                <h1>I'KOCH</h1>
                 <div class="date-display" id="teacher-date">28 Ağustos 2023 Pazartesi</div>
                 <div id="teacher-fullname-row" class="user-fullname-row">
                     <span id="teacher-fullname" class="user-fullname-name"></span>
@@ -1387,15 +1964,20 @@
             
             
 
-            <!-- Sınıflar Bölümü -->
-            <div class="student-list" style="margin-top: 25px;">
-                <h2><i class="fas fa-school"></i> Sınıflarım</h2>
-                <div id="classes-container"></div>
+            <!-- Modern Sınıf Yönetim Paneli -->
+            <div class="class-management-panel">
+                <div class="panel-header">
+                    <h1 class="panel-title">Sınıflarım</h1>
+                    <p class="panel-subtitle">Sınıflarınızı yönetin ve öğrenci verilerini takip edin</p>
+                </div>
+                
+                <div id="classes-container">
+                    <!-- Sınıflar buraya dinamik olarak yüklenecek -->
+                </div>
             </div>
             
-            <!-- Sınıf Öğrencileri Bölümü -->
+                        <!-- Sınıf Öğrencileri Bölümü -->
             <div class="student-list" style="margin-top: 25px;">
-                <h2><i class="fas fa-users"></i> Sınıf Öğrencileri</h2>
                 <div id="class-students-container">
                     <div class="empty-state">
                         <i class="fas fa-hand-pointer"></i>
@@ -2428,64 +3010,94 @@
                 students.sort((a, b) => b.stats.total - a.stats.total);
                 
                 let html = `
-                    <div class="stats-overview" style="margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 10px;">
-                        <h3 style="margin-bottom: 10px; color: #4e54c8;">${classData.name} Sınıfı İstatistikleri</h3>
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px;">
-                            <div style="text-align: center;">
-                                <div style="font-size: 1.5rem; font-weight: bold; color: #4e54c8;">${students.length}</div>
-                                <div style="font-size: 0.9rem; color: #6c757d;">Sınıf Öğrencisi</div>
+                    <div class="students-page-container">
+                        <div class="students-page-wrapper">
+                            <!-- Ana Başlık -->
+                            <div class="students-page-header">
+                                <h1 class="students-page-title">Sınıf Öğrencileri</h1>
+                                <p class="students-page-subtitle">Öğrenci performanslarını takip edin ve analiz edin</p>
                             </div>
-                            <div style="text-align: center;">
-                                <div style="font-size: 1.5rem; font-weight: bold; color: #4e54c8;">${students.reduce((sum, s) => sum + s.stats.total, 0)}</div>
-                                <div style="font-size: 0.9rem; color: #6c757d;">Toplam Soru</div>
+                            
+                            <!-- Sınıf İstatistikleri Kartı -->
+                            <div class="class-stats-card">
+                                <div class="class-stats-header">
+                                    <h2 class="class-stats-title">${classData.name} Sınıfı</h2>
+                                    <p class="class-stats-subtitle">Genel sınıf istatistikleri ve performans özeti</p>
+                                </div>
+                                
+                                <div class="stats-grid">
+                                    <div class="stat-card">
+                                        <span class="stat-value">${students.length}</span>
+                                        <div class="stat-label">Sınıf Öğrencisi</div>
+                                    </div>
+                                    <div class="stat-card">
+                                        <span class="stat-value">${students.reduce((sum, s) => sum + s.stats.total, 0)}</span>
+                                        <div class="stat-label">Toplam Soru</div>
+                                    </div>
+                                    <div class="stat-card">
+                                        <span class="stat-value">${students.reduce((sum, s) => sum + s.stats.sayfa, 0)}</span>
+                                        <div class="stat-label">Toplam Sayfa</div>
+                                    </div>
+                                    <div class="stat-card">
+                                        <span class="stat-value">${Math.round(students.reduce((sum, s) => sum + s.stats.total, 0) / students.length)}</span>
+                                        <div class="stat-label">Ortalama Soru</div>
+                                    </div>
+                                </div>
                             </div>
-                            <div style="text-align: center;">
-                                <div style="font-size: 1.5rem; font-weight: bold; color: #4e54c8;">${students.reduce((sum, s) => sum + s.stats.sayfa, 0)}</div>
-                                <div style="font-size: 0.9rem; color: #6c757d;">Toplam Sayfa</div>
-                            </div>
-                            <div style="text-align: center;">
-                                <div style="font-size: 1.5rem; font-weight: bold; color: #4e54c8;">${Math.round(students.reduce((sum, s) => sum + s.stats.total, 0) / students.length)}</div>
-                                <div style="font-size: 0.9rem; color: #6c757d;">Ortalama Soru</div>
-                            </div>
-                        </div>
-                    </div>
+                            
+                            <!-- Öğrenci Kartları Grid -->
+                            <div class="students-grid">
                 `;
                 
                 // Öğrenci listesi
                 students.forEach((student, index) => {
                     const rank = index + 1;
-                    const rankIcon = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : `#${rank}`;
+                    let badgeClass = 'badge-default';
+                    let badgeIcon = `${rank}`;
+                    
+                    if (rank === 1) {
+                        badgeClass = 'badge-gold';
+                        badgeIcon = '1';
+                    } else if (rank === 2) {
+                        badgeClass = 'badge-silver';
+                        badgeIcon = '2';
+                    } else if (rank === 3) {
+                        badgeClass = 'badge-bronze';
+                        badgeIcon = '3';
+                    }
                     
                     html += `
-                        <div class="student-item" onclick="showStudentDetail('${student.id}')" style="position: relative; cursor: pointer;">
-                            <div style="position: absolute; top: 10px; right: 10px; font-size: 1.2rem; font-weight: bold; color: #4e54c8;">
-                                ${rankIcon}
+                        <div class="student-card" onclick="showStudentDetail('${student.id}')">
+                            <div class="student-card-header">
+                                <div class="student-info">
+                                    <div class="student-name">${student.name}</div>
+                                </div>
+                                <div class="achievement-badge ${badgeClass}">
+                                    ${badgeIcon}
+                                </div>
                             </div>
-                            <div class="student-name" style="font-size: 1.1rem; margin-bottom: 8px;">${student.name}</div>
-                            <div style="color: #6c757d; font-size: 0.9rem; margin-bottom: 8px;">${student.email}</div>
-                            <div class="student-stats" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); gap: 10px; margin-top: 10px;">
-                                <div style="text-align: center; padding: 8px; background: #e9ecef; border-radius: 6px;">
-                                    <div style="font-weight: bold; color: #4e54c8;">${student.stats.total}</div>
-                                    <div style="font-size: 0.8rem;">Soru</div>
+                            
+                            <div class="student-stats">
+                                <div class="stat-item">
+                                    <span class="stat-number">${student.stats.total}</span>
+                                    <div class="stat-text">Soru</div>
                                 </div>
-                                <div style="text-align: center; padding: 8px; background: #e9ecef; border-radius: 6px;">
-                                    <div style="font-weight: bold; color: #4e54c8;">${student.stats.sayfa}</div>
-                                    <div style="font-size: 0.8rem;">Sayfa</div>
-                                </div>
-                                <div style="text-align: center; padding: 8px; background: #e9ecef; border-radius: 6px;">
-                                    <div style="font-weight: bold; color: #4e54c8;">${student.stats.turkce}</div>
-                                    <div style="font-size: 0.8rem;">Türkçe</div>
-                                </div>
-                                <div style="text-align: center; padding: 8px; background: #e9ecef; border-radius: 6px;">
-                                    <div style="font-weight: bold; color: #4e54c8;">${student.stats.matematik}</div>
-                                    <div style="font-size: 0.8rem;">Matematik</div>
+                                <div class="stat-item">
+                                    <span class="stat-number">${student.stats.sayfa}</span>
+                                    <div class="stat-text">Sayfa</div>
                                 </div>
                             </div>
                         </div>
                     `;
                 });
                 
-                document.getElementById('class-students-container').innerHTML = html;
+                                    html += `
+                            </div>
+                        </div>
+                    </div>
+                    `;
+                    
+                    document.getElementById('class-students-container').innerHTML = html;
                 
             } catch (error) {
                 console.error("Sınıf öğrenci verileri yüklenirken hata:", error);
@@ -2504,11 +3116,41 @@
             }
         }
         
-        async function showStudentDetail(studentId) {
+                async function showStudentDetail(studentId) {
             console.log('Öğrenci detayı gösteriliyor:', studentId);
+            
+            // Eğer detay zaten açıksa kapat
+            const existingDetail = document.querySelector(`[data-student-detail="${studentId}"]`);
+            if (existingDetail) {
+                hideStudentDetail(studentId);
+                return;
+            }
+            
+            // Hemen loading göster
+            const studentCard = document.querySelector(`[onclick="showStudentDetail('${studentId}')"]`);
+            if (studentCard) {
+                const loadingHTML = `
+                    <div class="student-detail" data-student-detail="${studentId}" style="margin-top: 0; padding: 0; background: transparent; border-radius: 0; box-shadow: none;">
+                        <div style="padding: 20px; text-align: center; color: #64748b;">
+                            <i class="fas fa-spinner fa-spin" style="font-size: 1.2rem; margin-bottom: 10px;"></i>
+                            <div>Yükleniyor...</div>
+                        </div>
+                    </div>
+                `;
+                const detailDiv = document.createElement('div');
+                detailDiv.innerHTML = loadingHTML;
+                studentCard.parentNode.insertBefore(detailDiv, studentCard.nextSibling);
+            }
+            
             try {
-                // Öğrenci bilgilerini getir
-                const studentDoc = await db.collection('users').doc(studentId).get();
+                // Paralel olarak tüm verileri getir
+                const [studentDoc, studentProfileDoc, statsDoc, historySnapshot] = await Promise.all([
+                    db.collection('users').doc(studentId).get(),
+                    db.collection('students').doc(studentId).get(),
+                    db.collection('userStats').doc(studentId).get(),
+                    db.collection('users').doc(studentId).collection('days').orderBy('timestamp', 'desc').limit(7).get()
+                ]);
+                
                 if (!studentDoc.exists) {
                     showToast('Öğrenci bulunamadı.', 'error');
                     return;
@@ -2518,54 +3160,33 @@
                 
                 // Öğrenci adını al
                 let studentName = student.email;
-                try {
-                    const studentProfileDoc = await db.collection('students').doc(studentId).get();
-                    if (studentProfileDoc.exists) {
-                        const sd = studentProfileDoc.data();
-                        studentName = sd.fullName || ((sd.firstName && sd.lastName) ? `${sd.firstName} ${sd.lastName}` : student.email);
-                    }
-                } catch (error) {
-                    console.warn(`Öğrenci adı alınamadı (${studentId}):`, error);
+                if (studentProfileDoc.exists) {
+                    const sd = studentProfileDoc.data();
+                    studentName = sd.fullName || ((sd.firstName && sd.lastName) ? `${sd.firstName} ${sd.lastName}` : student.email);
                 }
                 
-                // Öğrenci istatistiklerini getir
+                // Öğrenci istatistiklerini al
                 let stats = { turkce: 0, matematik: 0, fen: 0, inkilap: 0, din: 0, ingilizce: 0, total: 0, sayfa: 0 };
-                try {
-                    const statsDoc = await db.collection('userStats').doc(studentId).get();
-                    if (statsDoc.exists) {
-                        stats = { ...stats, ...statsDoc.data() };
-                    }
-                } catch (error) {
-                    console.warn(`Öğrenci istatistikleri alınamadı (${studentId}):`, error);
+                if (statsDoc.exists) {
+                    stats = { ...stats, ...statsDoc.data() };
                 }
                 
-                // Öğrenci geçmiş verilerini getir
+                // Geçmiş verilerini hazırla
                 let historyHTML = '';
-                try {
-                    const historySnapshot = await db.collection('users').doc(studentId)
-                        .collection('days')
-                        .orderBy('timestamp', 'desc')
-                        .limit(7)
-                        .get();
-                    
-                    if (historySnapshot.empty) {
-                        historyHTML = '<p style="text-align: center; color: #6c757d; padding: 20px;">Henüz kayıtlı veri bulunmamaktadır</p>';
-                    } else {
-                        historyHTML = '<div class="history-list">';
-                        historySnapshot.forEach(doc => {
-                            const data = doc.data();
-                            historyHTML += `
-                                <div class="history-item">
-                                    <div class="history-date">${data.date}</div>
-                                    <div class="history-stats">${data.total || 0} soru, ${data.sayfa || 0} sayfa</div>
-                                </div>
-                            `;
-                        });
-                        historyHTML += '</div>';
-                    }
-                } catch (error) {
-                    console.warn(`Öğrenci geçmişi alınamadı (${studentId}):`, error);
-                    historyHTML = '<p style="text-align: center; color: #6c757d; padding: 20px;">Geçmiş veriler yüklenemedi</p>';
+                if (historySnapshot.empty) {
+                    historyHTML = '<p style="text-align: center; color: #64748b; padding: 20px;">Henüz kayıtlı veri bulunmamaktadır</p>';
+                } else {
+                    historyHTML = '<div class="history-list">';
+                    historySnapshot.forEach(doc => {
+                        const data = doc.data();
+                        historyHTML += `
+                            <div class="history-item">
+                                <div class="history-date">${data.date}</div>
+                                <div class="history-stats">${data.total || 0} soru, ${data.sayfa || 0} sayfa</div>
+                            </div>
+                        `;
+                    });
+                    historyHTML += '</div>';
                 }
                 
                 // Performans grafiği HTML'i oluştur
@@ -2579,13 +3200,19 @@
                 ];
                 
                 const maxValue = Math.max(...subjects.map(s => s.value), 10);
-                let chartHTML = '<div class="performance-chart" style="height: 200px; background: #e9ecef; border-radius: 10px; margin: 15px 0; display: flex; align-items: flex-end; justify-content: space-around; padding: 10px;">';
+                let chartHTML = `
+                    <div class="performance-chart" style="height: 200px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 15px; margin: 15px 0; display: flex; align-items: flex-end; justify-content: space-around; padding: 20px; box-shadow: inset 0 2px 10px rgba(0,0,0,0.1);">
+                        <div style="position: absolute; top: 10px; left: 10px; font-weight: 600; color: #4e54c8; font-size: 0.9rem;">Ders Bazlı Performans</div>
+                `;
                 subjects.forEach(subject => {
-                    const barHeight = subject.value > 0 ? (subject.value / maxValue) * 150 : 5;
+                    const barHeight = subject.value > 0 ? (subject.value / maxValue) * 140 : 3;
+                    const barColor = subject.value > 0 ? 
+                        `linear-gradient(to top, #4e54c8, #8f94fb)` : 
+                        `linear-gradient(to top, #e9ecef, #dee2e6)`;
                     chartHTML += `
-                        <div style="width: 40px; background: #4e54c8; border-radius: 5px 5px 0 0; position: relative;">
-                            <div style="position: absolute; top: -20px; left: 0; right: 0; text-align: center; font-weight: bold;">${subject.value}</div>
-                            <div style="position: absolute; bottom: -25px; left: 0; right: 0; text-align: center; font-size: 0.8rem;">${subject.label}</div>
+                        <div style="width: 35px; height: ${barHeight}px; background: ${barColor}; border-radius: 8px 8px 0 0; position: relative; box-shadow: 0 2px 8px rgba(78, 84, 200, 0.2); transition: all 0.3s;">
+                            <div style="position: absolute; top: -25px; left: 0; right: 0; text-align: center; font-weight: bold; color: #4e54c8; font-size: 0.85rem;">${subject.value}</div>
+                            <div style="position: absolute; bottom: -35px; left: 0; right: 0; text-align: center; font-size: 0.7rem; color: #6c757d; font-weight: 500; white-space: nowrap;">${subject.label}</div>
                         </div>
                     `;
                 });
@@ -2593,12 +3220,9 @@
                 
                 // Dinamik detay HTML'i oluştur
                 const detailHTML = `
-                    <div class="student-detail" style="margin-top: 20px; padding: 20px; background: #f8f9fa; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
-                        <div class="detail-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid #4e54c8;">
-                            <h3 style="color: #4e54c8; font-size: 1.3rem; margin: 0;">${studentName} - Detaylı İstatistikler</h3>
-                            <button class="auth-btn" onclick="hideStudentDetail('${studentId}')" style="background: #dc2626; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer;">
-                                <i class="fas fa-times"></i> Kapat
-                            </button>
+                    <div class="student-detail" data-student-detail="${studentId}" onclick="hideStudentDetail('${studentId}')">
+                        <div class="detail-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 20px 20px 15px 20px; border-bottom: 2px solid #4e54c8; background: #f8f9fa; border-radius: 0;">
+                            <h3 style="color: #4e54c8; font-size: 1.3rem; margin: 0; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.color='#3f44a7'; this.style.transform='translateY(-1px)'" onmouseout="this.style.color='#4e54c8'; this.style.transform='translateY(0)'">Detaylı İstatistikler</h3>
                         </div>
                         
                         ${chartHTML}
@@ -2638,8 +3262,8 @@
                             </div>
                         </div>
                         
-                        <div class="student-details-panel" style="margin-top: 20px; padding: 15px; background: white; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                            <h4 style="color: #4e54c8; margin-bottom: 15px;">Öğrenci Performans Geçmişi</h4>
+                        <div class="student-details-panel" style="margin-top: 0; padding: 20px; background: #f8f9fa; border-radius: 0 0 15px 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
+                            <h4 style="color: #4e54c8; margin-bottom: 15px;">Performans Geçmişi</h4>
                             <div id="student-history-${studentId}">
                                 ${historyHTML}
                             </div>
@@ -3205,27 +3829,78 @@
                         </div>
                     `;
                 } else {
-                    let html = '<div class="classes-grid">';
-                    docs.forEach(c => {
+                    let html = '';
+                    docs.forEach((c, index) => {
                         const id = c.id;
                         const count = (c.memberIds && c.memberIds.length) || 0;
+                        
                         html += `
-                            <div class="class-card">
-                                <div class="class-card-header">
+                            <div class="class-section">
+                                <div class="section-header">
+                                    <div class="section-title">
+                                        <i class="fas fa-chalkboard"></i>
+                                        ${index === 0 ? 'Sınıf Yönetimi' : 'Öğrenci Verileri'}
+                                    </div>
                                     <div class="class-name">${c.name}</div>
-                                    <div class="class-count-badge">${count}</div>
                                 </div>
-                                <div class="class-card-actions">
-                                    <button class="small-btn" onclick="openAddStudentModal('${id}')"><i class='fas fa-user-plus'></i> Öğrenci</button>
-                                    <button class="small-btn secondary" onclick="copyClassId('${id}')"><i class='fas fa-copy'></i> Kopyala</button>
-                                    <button class="small-btn secondary" onclick="openMembersModal('${id}')"><i class='fas fa-users'></i> Üyeler</button>
-                                    <button class="small-btn danger" onclick="deleteClass('${id}')"><i class='fas fa-trash'></i> Sil</button>
-                                    <button class="small-btn veriler-btn" onclick="loadClassStudentsData('${id}')"><i class='fas fa-chart-bar'></i> Öğrenci Verileri</button>
+                                
+                                <div class="action-grid">
+                                    <div class="action-card" onclick="openAddStudentModal('${id}')">
+                                        <div class="action-icon">
+                                            <i class="fas fa-user-plus"></i>
+                                        </div>
+                                        <div class="action-title">Öğrenci Ekle</div>
+                                        <div class="action-desc">Sınıfa yeni öğrenci ekleyin</div>
+                                    </div>
+                                    
+                                    <div class="action-card small-action" onclick="copyClassId('${id}')">
+                                        <div class="action-icon">
+                                            <i class="fas fa-copy"></i>
+                                        </div>
+                                        <div class="action-title">ID Kopyala</div>
+                                        <div class="action-desc">Sınıf ID'sini kopyala</div>
+                                    </div>
+                                    
+                                    <div class="action-card small-action" onclick="openMembersModal('${id}')">
+                                        <div class="action-icon">
+                                            <i class="fas fa-users"></i>
+                                        </div>
+                                        <div class="action-title">Üyeler</div>
+                                        <div class="action-desc">Sınıf üyelerini gör</div>
+                                    </div>
+                                    
+                                    <div class="action-card main-action" onclick="loadClassStudentsData('${id}')">
+                                        <div class="action-icon">
+                                            <i class="fas fa-chart-bar"></i>
+                                        </div>
+                                        <div class="action-title">Öğrenci Verileri</div>
+                                        <div class="action-desc">Detaylı öğrenci istatistikleri</div>
+                                    </div>
+                                    
+                                    <div class="action-card small-action danger-action" onclick="deleteClass('${id}')">
+                                        <div class="action-icon">
+                                            <i class="fas fa-trash"></i>
+                                        </div>
+                                        <div class="action-title">Sil</div>
+                                        <div class="action-desc">Sınıfı sil</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="stats-overview">
+                                    <div class="stat-item">
+                                        <div class="stat-value">${count}</div>
+                                        <div class="stat-label">Öğrenci</div>
+                                    </div>
                                 </div>
                             </div>
                         `;
+                        
+                        // Ayraç ekle (son sınıf hariç)
+                        if (index < docs.length - 1) {
+                            html += '<div class="divider"></div>';
+                        }
                     });
-                    html += '</div>';
+                    
                     document.getElementById('classes-container').innerHTML = html;
                 }
             } catch (e) {
